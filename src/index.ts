@@ -12,11 +12,6 @@ app.listen(PORT, () => {
   console.log(`Server running ${PORT}`);
 });
 
-// Cremos rutas para usuarios
-app.get("/user", (req, res) => {
-  // lógica de la infor que recuperamos de los usuarios
-  return res.send("GET USUARIO");
-});
 
 app.post("/user", (req, res) => {
   //lógica para crear usuarios

@@ -14,6 +14,9 @@ router.post("/", (req, res) => {
     return res.send("CREAR USUARIO");
   });
 
-
+router.put("/", (req, res) => {
+    //lógica para actualizar usuarios
+    return res.send("ACTUALIZAR USUARIO");
+  });
 
 export{router}

@@ -15,7 +15,4 @@ app.listen(PORT, () => {
 
 
 
-app.delete("/user", (req, res) => {
-  //lógica para eliminar usuarios
-  return res.send("ELIMINAR USUARIO");
-});
+

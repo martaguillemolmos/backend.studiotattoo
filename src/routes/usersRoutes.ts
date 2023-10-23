@@ -19,5 +19,10 @@ router.put("/", (req, res) => {
     return res.send("ACTUALIZAR USUARIO");
   });
 
+router.delete("/", (req, res) => {
+    //lógica para eliminar usuarios
+    return res.send("ELIMINAR USUARIO");
+  });
+
 export{router}
 

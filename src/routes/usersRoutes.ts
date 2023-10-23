@@ -9,10 +9,11 @@ router.get("/", (req, res) => {
     return res.send("GET USUARIO");
   });
 
-router.post("/user", (req, res) => {
+router.post("/", (req, res) => {
     //lógica para crear usuarios
     return res.send("CREAR USUARIO");
   });
 
-export{router}
 
+
+export{router}

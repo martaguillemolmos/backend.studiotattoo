@@ -13,15 +13,7 @@ app.listen(PORT, () => {
 });
 
 
-app.post("/user", (req, res) => {
-  //lógica para crear usuarios
-  return res.send("CREAR USUARIO");
-});
 
-app.put("/user", (req, res) => {
-  //lógica para actualizar usuarios
-  return res.send("ACTUALIZAR USUARIO");
-});
 
 app.delete("/user", (req, res) => {
   //lógica para eliminar usuarios

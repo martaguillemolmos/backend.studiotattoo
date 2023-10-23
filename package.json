@@ -9,6 +9,7 @@
   "author": "Marta Guillem Olmos",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "typescript": "^5.2.2"
   }
 }

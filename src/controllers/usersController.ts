@@ -9,4 +9,10 @@ const createUser= (req: Request, res: Response) => {
     //lógica para crear usuarios
     return res.send("CREAR USUARIO");
   }
-export{getUser, createUser}
+
+const updateUser = (req: Request, res: Response) => {
+    //lógica para actualizar usuarios
+    return res.send("ACTUALIZAR USUARIO");
+  }
+
+export{getUser, createUser, updateUser}

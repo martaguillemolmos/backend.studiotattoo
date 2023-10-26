@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, getUser } from "../controllers/usersController";
+import { createUser, getUser, updateUser } from "../controllers/usersController";
 
 const router = Router ()
 
@@ -9,10 +9,7 @@ router.get("/", getUser);
 
 router.post("/", createUser);
 
-router.put("/", (req, res) => {
-    //lógica para actualizar usuarios
-    return res.send("ACTUALIZAR USUARIO");
-  });
+router.put("/", updateUser);
 
 router.delete("/", (req, res) => {
     //lógica para eliminar usuarios

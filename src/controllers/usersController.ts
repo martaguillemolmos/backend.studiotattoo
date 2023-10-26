@@ -15,4 +15,9 @@ const updateUser = (req: Request, res: Response) => {
     return res.send("ACTUALIZAR USUARIO");
   }
 
-export{getUser, createUser, updateUser}
+const deleteUser =  (req: Request, res: Response) => {
+    //lógica para eliminar usuarios
+    return res.send("ELIMINAR USUARIO");
+  }
+
+export{getUser, createUser, updateUser, deleteUser}

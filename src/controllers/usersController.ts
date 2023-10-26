@@ -5,4 +5,8 @@ const getUser = (req: Request, res: Response) => {
     return res.send("GET USUARIO");
   }
 
-export{getUser}
+const createUser= (req: Request, res: Response) => {
+    //lógica para crear usuarios
+    return res.send("CREAR USUARIO");
+  }
+export{getUser, createUser}

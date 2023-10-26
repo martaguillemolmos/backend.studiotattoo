@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser } from "../controllers/usersController";
+import { createUser, getUser } from "../controllers/usersController";
 
 const router = Router ()
 
@@ -7,10 +7,7 @@ const router = Router ()
 
 router.get("/", getUser);
 
-router.post("/", (req, res) => {
-    //lógica para crear usuarios
-    return res.send("CREAR USUARIO");
-  });
+router.post("/", createUser);
 
 router.put("/", (req, res) => {
     //lógica para actualizar usuarios

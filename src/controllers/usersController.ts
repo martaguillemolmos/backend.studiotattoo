@@ -24,14 +24,16 @@ const loginUser = (req: Request, res: Response) => {
 const createUser = async (req: any, res: Response) => {
   //Lógica para crear usuarios
   try {
-    // recuparemos la información que nos envían desde el body
+    // Recuperamos la información que nos envían desde el body
     const { name, surname, phone, email, password } = req.body;
+    // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
+    const encryptedPassword = bcrypt.hashSync (password, 10)
     const newUser = await Users.create({
       name,
       surname,
       phone,
       email,
-      password,
+      password: encryptedPassword,
     }).save();
     return res.json(newUser);
     // return res.json("CREATE USER")

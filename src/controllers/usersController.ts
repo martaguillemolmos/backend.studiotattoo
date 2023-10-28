@@ -3,6 +3,32 @@ import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const createUser = async (req: any, res: Response) => {
+  //Lógica para crear usuarios
+  try {
+    // Recuperamos la información que nos envían desde el body
+    const { name, surname, phone, email, password } = req.body;
+    // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
+    const encryptedPassword = bcrypt.hashSync (password, 10)
+    const newUser = await Users.create({
+      name,
+      surname,
+      phone,
+      email,
+      password: encryptedPassword,
+    }).save();
+    return res.json(newUser);
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha creado usuario",
+      // esto lo utilizamos para que nos salte el tipo de error
+      error: error,
+    });
+  }
+};
+
 const getUser = async (req: any, res: Response) => {
   try {
     // lógica de la infor que recuperamos la información de TODOS los usuarios
@@ -62,32 +88,6 @@ const loginUser = async (req: any, res: Response) => {
     return res.status(500).json(error);
   }
 }
-
-const createUser = async (req: any, res: Response) => {
-  //Lógica para crear usuarios
-  try {
-    // Recuperamos la información que nos envían desde el body
-    const { name, surname, phone, email, password } = req.body;
-    // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
-    const encryptedPassword = bcrypt.hashSync (password, 10)
-    const newUser = await Users.create({
-      name,
-      surname,
-      phone,
-      email,
-      password: encryptedPassword,
-    }).save();
-    return res.json(newUser);
-  } catch (error) {
-    console.log(error);
-    return res.json({
-      succes: false,
-      message: "No se ha creado usuario",
-      // esto lo utilizamos para que nos salte el tipo de error
-      error: error,
-    });
-  }
-};
 
 const updateUserById = async (req: any, res: Response) => {
   try {

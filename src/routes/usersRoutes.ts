@@ -13,5 +13,5 @@ router.put("/", updateUser);
 
 router.delete("/", deleteUser);
 
-export{router}
+export {router}
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Users } from "../models/User";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const getUser = async (req: any, res: Response) => {
   try {
@@ -17,8 +18,49 @@ const getUser = async (req: any, res: Response) => {
   }
 };
 
-const loginUser = (req: Request, res: Response) => {
-  return res.send("Login")
+const loginUser = async (req: any, res: Response) => {
+  try {
+    //Lógica para poder acceder
+
+    // Recuperamos los datos guardados en body
+    const { email, password } = req.body;
+
+    //Consultar en BD si el usuario existe
+    const user = await Users.findOneBy({
+      email,
+    });
+
+    // En el caso que el usuario no sea el mismo
+    if (!user) {
+      return res.status(404).json("Usuario o contraseña incorrecta");
+    }
+
+    //Si el usuario si es correcto, compruebo la contraseña
+    if (bcrypt.compareSync(password, user.password)) {
+      // return res.json("Bienvenido " + user.name);
+    }
+
+    //generar token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+      },
+      "secreto",
+      {
+        expiresIn: "2h",
+      }
+    );
+
+    return res.json({
+      success: true,
+      message: "User logged successfully",
+      token: token,
+    });
+
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 }
 
 const createUser = async (req: any, res: Response) => {
@@ -36,7 +78,6 @@ const createUser = async (req: any, res: Response) => {
       password: encryptedPassword,
     }).save();
     return res.json(newUser);
-    // return res.json("CREATE USER")
   } catch (error) {
     console.log(error);
     return res.json({

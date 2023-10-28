@@ -7,7 +7,6 @@ const getUser = async (req: any, res: Response) => {
     const users = await Users.find();
     return res.json(users);
   } catch (error) {
-    console.log(error);
     return res.json({
       succes: false,
       message: "No hemos podido recuperar los usuarios",
@@ -17,31 +16,31 @@ const getUser = async (req: any, res: Response) => {
   }
 };
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: any, res: Response) => {
   //lógica para crear usuarios
   try {
     // recuparemos la información que nos envían desde el body
-
+    const {name, surname, phone, email, password} = req.body
     const newUser = await Users.create({
-      name: req.body.name,
-      surname: req.body.surname,
-      phone: req.body.phone,
-      email: req.body.email,
-      password: req.body.password,
+      name,
+      surname,
+      phone,
+      email,
+      password,
     }).save();
-    console.log(newUser);
-    return res.send(newUser);
+    return res.json(newUser);
     // return res.json("CREATE USER")
   } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
-      message: "no se ha creado usuario",
+      message: "No se ha creado usuario",
       // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }
 };
+
 const updateUser = (req: Request, res: Response) => {
   //lógica para actualizar usuarios
   return res.send("ACTUALIZAR USUARIO");

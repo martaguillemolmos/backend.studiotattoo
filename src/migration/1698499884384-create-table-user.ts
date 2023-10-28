@@ -25,6 +25,11 @@ export class CreateTableUser1698499884384 implements MigrationInterface {
                         length: "50"
                     },
                     {
+                        name: "phone",
+                        type: "varchar",
+                        length: "20"
+                    },
+                    {
                         name: "email",
                         type: "varchar",
                         length: "100",
@@ -39,6 +44,12 @@ export class CreateTableUser1698499884384 implements MigrationInterface {
                         name: "is_active",
                         type: "boolean",
                         default: "true"
+                    },
+                    {
+                        name: "role",
+                        type: "enum",
+                        enum: ["user", "admin", "super_admin"],
+                        default: '"user"'
                     },
                     {
                         name: "created_at",

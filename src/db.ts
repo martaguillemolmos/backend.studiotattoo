@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { CreateTableUser1698499884384 } from "./migration/1698499884384-create-table-user";
 
 const AppDataSource = new DataSource({
   type: "mysql",
@@ -9,7 +10,7 @@ const AppDataSource = new DataSource({
   password: "1234",
   database: "studio_tatto",
   entities: [],
-  migrations: [],
+  migrations: [CreateTableUser1698499884384],
   synchronize: false,
   logging: false,
 });

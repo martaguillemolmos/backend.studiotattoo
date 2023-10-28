@@ -20,7 +20,7 @@ const createUser = async (req: any, res: Response) => {
   //lógica para crear usuarios
   try {
     // recuparemos la información que nos envían desde el body
-    const {name, surname, phone, email, password} = req.body
+    const { name, surname, phone, email, password } = req.body;
     const newUser = await Users.create({
       name,
       surname,
@@ -41,9 +41,30 @@ const createUser = async (req: any, res: Response) => {
   }
 };
 
-const updateUser = (req: Request, res: Response) => {
-  //lógica para actualizar usuarios
-  return res.send("ACTUALIZAR USUARIO");
+const updateUserById = async (req: any, res: Response) => {
+  try {
+    //lógica para actualizar usuarios
+    const userId = req.params.id;
+    const { name, password } = req.body;
+    await Users.update(
+      {
+        id: parseInt(userId),
+      },
+      {
+        name,
+        password
+      }
+    );
+    return res.json(name + "Ha sido actualizado con éxito");
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha actualizado el usuario",
+      // esto lo utilizamos para que nos salte el tipo de error
+      error: error,
+    });
+  }
 };
 
 const deleteUser = (req: Request, res: Response) => {
@@ -51,4 +72,4 @@ const deleteUser = (req: Request, res: Response) => {
   return res.send("ELIMINAR USUARIO");
 };
 
-export { getUser, createUser, updateUser, deleteUser };
+export { getUser, createUser, updateUserById, deleteUser };

@@ -1,17 +1,18 @@
 import { Router } from "express";
-import { createUser, deleteUser, getUser, updateUserById} from "../controllers/usersController";
+import { createUser, deleteUserbyId, getUser, updateUserById} from "../controllers/usersController";
 
 const router = Router ()
 
 // Cremos rutas para usuarios
 
+//Acceder a todos los usuarios registrados
 router.get("/", getUser);
-
+//Crear un usuario
 router.post("/", createUser);
-
+//Actualizar un usuario por el Id
 router.put("/:id", updateUserById);
-
-router.delete("/", deleteUser);
+//Eliminar un usuario por el Id
+router.delete("/:id", deleteUserbyId);
 
 export {router}
 

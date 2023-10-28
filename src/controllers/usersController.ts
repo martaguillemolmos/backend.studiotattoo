@@ -17,7 +17,7 @@ const getUser = async (req: any, res: Response) => {
 };
 
 const createUser = async (req: any, res: Response) => {
-  //lógica para crear usuarios
+  //Lógica para crear usuarios
   try {
     // recuparemos la información que nos envían desde el body
     const { name, surname, phone, email, password } = req.body;
@@ -43,9 +43,10 @@ const createUser = async (req: any, res: Response) => {
 
 const updateUserById = async (req: any, res: Response) => {
   try {
-    //lógica para actualizar usuarios
+    //Lógica para actualizar usuarios por su Id
     const userId = req.params.id;
     const { name, password } = req.body;
+    
     await Users.update(
       {
         id: parseInt(userId),
@@ -55,7 +56,7 @@ const updateUserById = async (req: any, res: Response) => {
         password
       }
     );
-    return res.json(name + "Ha sido actualizado con éxito");
+    return res.json("Ha sido actualizado con éxito.");
   } catch (error) {
     console.log(error);
     return res.json({
@@ -67,9 +68,29 @@ const updateUserById = async (req: any, res: Response) => {
   }
 };
 
-const deleteUser = (req: Request, res: Response) => {
-  //lógica para eliminar usuarios
-  return res.send("ELIMINAR USUARIO");
+const deleteUserbyId = async(req: Request, res: Response) => {
+  try {
+      //Lógica para eliminar usuario por el Id
+      const userIdToDelete = req.params.id;
+      const userToRemove = await Users.findOneBy (
+        {
+        id: parseInt(userIdToDelete),
+      }
+      )
+  
+      const userRemoved = await Users.remove(userToRemove as Users);
+      if (userRemoved) {
+        return res.json("Se ha eliminado el usuario correctamente");
+      }
+
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha eliminado el usuario",
+      error: error,
+    });
+  }
 };
 
-export { getUser, createUser, updateUserById, deleteUser };
+export { getUser, createUser, updateUserById, deleteUserbyId };

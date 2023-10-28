@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Users } from "../models/User";
+import bcrypt from "bcrypt";
 
 const getUser = async (req: any, res: Response) => {
   try {
@@ -15,6 +16,10 @@ const getUser = async (req: any, res: Response) => {
     });
   }
 };
+
+const loginUser = (req: Request, res: Response) => {
+  return res.send("Login")
+}
 
 const createUser = async (req: any, res: Response) => {
   //Lógica para crear usuarios
@@ -93,4 +98,4 @@ const deleteUserbyId = async(req: Request, res: Response) => {
   }
 };
 
-export { getUser, createUser, updateUserById, deleteUserbyId };
+export { getUser, loginUser, createUser, updateUserById, deleteUserbyId };

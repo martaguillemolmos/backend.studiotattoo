@@ -15,4 +15,3 @@ declare global {
     }
 }
 
-// Tras este documento, ya podemos modificar todos los any por Request que hay dentro de usersController

@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { createUser, deleteUserbyId, getUser, loginUser, updateUserById} from "../controllers/usersController";
+import { createUser, deleteUserbyId, getUser, loginUser, profileUser, updateUserById} from "../controllers/usersController";
+import { auth } from "../middelware/auth";
 
 const router = Router ()
 
@@ -9,6 +10,9 @@ const router = Router ()
 //Acceder a todos los usuarios registrados
 router.get("/", getUser);
 router.get("/login", loginUser);
+
+// Acceder al perfil de un usuario
+router.get ("/profile", auth, profileUser)
 
 //Crear un usuario
 router.post("/", createUser);

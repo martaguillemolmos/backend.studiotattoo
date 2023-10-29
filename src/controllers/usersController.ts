@@ -3,7 +3,8 @@ import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const createUser = async (req: any, res: Response) => {
+
+const createUser = async (req: Request, res: Response) => {
   //Lógica para crear usuarios
   try {
     // Recuperamos la información que nos envían desde el body
@@ -29,7 +30,7 @@ const createUser = async (req: any, res: Response) => {
   }
 };
 
-const getUser = async (req: any, res: Response) => {
+const getUser = async (req: Request, res: Response) => {
   try {
     // lógica de la infor que recuperamos la información de TODOS los usuarios
     const users = await Users.find();
@@ -44,7 +45,7 @@ const getUser = async (req: any, res: Response) => {
   }
 };
 
-const loginUser = async (req: any, res: Response) => {
+const loginUser = async (req: Request, res: Response) => {
   try {
     //Lógica para poder acceder
 
@@ -72,7 +73,7 @@ const loginUser = async (req: any, res: Response) => {
         id: user.id,
         role: user.role,
       },
-      "secreto",
+      "akiXi",
       {
         expiresIn: "2h",
       }
@@ -89,7 +90,32 @@ const loginUser = async (req: any, res: Response) => {
   }
 }
 
-const updateUserById = async (req: any, res: Response) => {
+// una vez ya hemos añadido nuestro middleware, que en este caso es auth, podemos chequear la ruta.
+const profileUser = async(req: any, res: Response) => {
+  try {
+      //para saber que usuario está accediendo
+  const user = await Users.findOneBy(
+    {
+      id:req.token.id
+    },
+    
+  )
+  return res.json({
+    message: "Datos del perfil",
+    data: user
+  });
+  } catch (error) {
+    return res.json ({
+      succes: false,
+      message: "No se puede procesar la respuesta",
+      // esto lo utilizamos para que nos salte el tipo de error
+      error: error
+  })
+  }
+
+};
+
+const updateUserById = async (req: Request, res: Response) => {
   try {
     //Lógica para actualizar usuarios por su Id
     const userId = req.params.id;
@@ -141,4 +167,4 @@ const deleteUserbyId = async(req: Request, res: Response) => {
   }
 };
 
-export { getUser, loginUser, createUser, updateUserById, deleteUserbyId };
+export { getUser, loginUser, profileUser, createUser, updateUserById, deleteUserbyId };

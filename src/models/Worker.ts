@@ -1,26 +1,25 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("workers")
 export class Worker extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    id!: number
-  
-    @Column()
-    user_id!: number
-  
-    @Column()
-    is_active!: boolean
+  @Column()
+  user_id!: number;
 
-    @Column()
-    formation!: string
+  @Column()
+  is_active!: boolean;
 
-    @Column()
-    experience!: string
-  
-    @Column()
-    contracted_at!: Date
-  
-    @Column()
-    update_at!: Date
+  @Column()
+  formation!: string;
+
+  @Column()
+  experience!: string;
+
+  @Column()
+  contracted_at!: Date;
+
+  @Column()
+  update_at!: Date;
 }

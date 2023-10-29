@@ -32,7 +32,7 @@ export class CreateTableWorker1698581245632 implements MigrationInterface {
             type: "varchar",
             length: "300",
           },
-          
+
           {
             name: "contracted_at",
             type: "timestamp",
@@ -44,17 +44,18 @@ export class CreateTableWorker1698581245632 implements MigrationInterface {
             default: "CURRENT_TIMESTAMP",
             onUpdate: "CURRENT_TIMESTAMP",
           },
-        ],  foreignKeys: [
+        ],
+        foreignKeys: [
           {
-              columnNames: ["user_id"],
-              referencedTableName: "users",
-              referencedColumnNames: ["id"],
-              onDelete: "CASCADE",
-          }
-      ]
+            columnNames: ["user_id"],
+            referencedTableName: "users",
+            referencedColumnNames: ["id"],
+            onDelete: "CASCADE",
+          },
+        ],
       }),
       true
-    )
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

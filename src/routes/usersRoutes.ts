@@ -10,7 +10,6 @@ const router = Router ()
 //Acceder a todos los usuarios registrados
 router.get("/", getUser);
 router.get("/login", loginUser);
-
 // Acceder al perfil de un usuario
 router.get ("/profile", auth, profileUser)
 

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { validate } from 'class-validator'
 import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -8,17 +9,26 @@ const createUser = async (req: Request, res: Response) => {
   //Lógica para crear usuarios
   try {
     // Recuperamos la información que nos envían desde el body
-    const { name, surname, phone, email, password } = req.body;
+    const { name, surname, phone, email, password, role } = req.body;
     // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
     const encryptedPassword = bcrypt.hashSync (password, 10)
-    const newUser = await Users.create({
-      name,
-      surname,
-      phone,
-      email,
-      password: encryptedPassword,
-    }).save();
-    return res.json(newUser);
+    const newUser = new Users(); 
+    
+    newUser.name = name;
+    newUser.email = email;
+    newUser.surname = surname;
+    newUser.password = encryptedPassword;
+    newUser.phone = phone;
+    
+
+    const errors = await validate(newUser);
+    console.log("LOS ERRORES",errors)
+     if(errors.length > 0 ){
+      return res.json(errors);
+     } else {
+      const user = await Users.create({...newUser}).save();
+      return res.json(user);
+     }
   } catch (error) {
     console.log(error);
     return res.json({

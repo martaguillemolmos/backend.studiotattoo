@@ -1,7 +1,14 @@
 import { Request, Response } from "express"
+import { Worker } from "../models/Worker"
 
-const getWorkers = (req: Request, res: Response) => {
-    return res.send("Todos los trabajadores")
+const getWorkers = async (req: any, res: Response) => {
+    try {
+        const workers = await Worker.find ()
+    return res.json(workers)
+    } catch (error) {
+        
+    }
+
 }
 
 const createWorker = (req: Request, res: Response) => {

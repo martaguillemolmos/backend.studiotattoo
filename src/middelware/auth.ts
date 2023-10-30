@@ -23,9 +23,12 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
         message: "auth_requiered"
       });
     }
+    //declaramos la constante que contiene el secreto que debe acompañar a nuestro token
+    const secret = process.env.JWT_SECRET
     // hemos utilizado "secreto" y tenemos que escribir lo mismo que hemos indicado en la const token de usersController
     //comprobamos que ese token viene acompañado de "secreto"
-    const tokenDecored = jwt.verify(token, "akiXi") as TokenDecored;
+    //debemos de declarar la constante secret y acompañarlo con un "as string" porque declaramos que es de tipo string
+    const tokenDecored = jwt.verify(token, secret as string) as TokenDecored;
     //acceder  a la información del objeto. Para que deje de chillar este token, debemos de modificar en req, Request por any.
     req.token = tokenDecored;
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Worker } from "../models/Worker";
 
 const getWorkers = async (req: any, res: Response) => {
+  //lógica para crear un nuevo trabajador.
   try {
     const workers = await Worker.find({ relations: ['users'] });
     return res.json(workers);

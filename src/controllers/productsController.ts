@@ -74,8 +74,29 @@ const updateProductById = async(req: Request, res:Response) => {
       }
 }
 
-const deleteProduct = (req: Request, res:Response) => {
-    return res.send("Producto eliminado")
+const deleteProductById = async(req: Request, res:Response) => {
+    try {
+        //Lógica para eliminar producto por el Id
+        const productIdToDelete = req.params.id;
+        const productToRemove = await Product.findOneBy (
+          {
+          id: parseInt(productIdToDelete),
+        }
+        )
+    
+        const productRemoved = await Product.remove(productToRemove as Product);
+        if (productRemoved) {
+          return res.json("Se ha eliminado el producto correctamente");
+        }
+  
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        succes: false,
+        message: "No se ha eliminado el producto",
+        error: error,
+      });
+    }
 }
 
-export {getProduct, createProduct, updateProductById, deleteProduct}
+export {getProduct, createProduct, updateProductById, deleteProductById}

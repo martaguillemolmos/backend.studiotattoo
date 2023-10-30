@@ -44,12 +44,38 @@ const createProduct = async(req: Request, res:Response) => {
 }
 
 
-const updateProduct = (req: Request, res:Response) => {
-    return res.send("Producto actualizado")
+const updateProductById = async(req: Request, res:Response) => {
+    try {
+        //Lógica para actualizar productos por su Id
+        const productId = req.params.id;
+        const { type, product, price, description, image} = req.body;
+        
+        await Product.update(
+          {
+            id: parseInt(productId),
+          },
+          {
+            type,
+            product,
+            price,
+            description,
+            image
+          }
+        );
+        return res.json("Ha sido actualizado con éxito.");
+      } catch (error) {
+        console.log(error);
+        return res.json({
+          succes: false,
+          message: "No se ha actualizado el producto",
+          // esto lo utilizamos para que nos salte el tipo de error
+          error: error,
+        });
+      }
 }
 
 const deleteProduct = (req: Request, res:Response) => {
     return res.send("Producto eliminado")
 }
 
-export {getProduct, createProduct, updateProduct, deleteProduct}
+export {getProduct, createProduct, updateProductById, deleteProduct}

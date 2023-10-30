@@ -12,10 +12,11 @@ export class CreateTableWorker1698581245632 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: "increment",
-          },
+        },
           {
             name: "user_id",
             type: "int",
+            isNullable: true,
           },
           {
             name: "is_active",

@@ -1,4 +1,3 @@
-import { IsEmail } from "class-validator";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 const Roles = {
@@ -20,10 +19,9 @@ export class Users extends BaseEntity {
   surname!: string
 
   @Column()
-  phone!: string
+  phone!: number
 
   @Column()
-  @IsEmail()
   email!: string
 
   @Column()
@@ -40,4 +38,6 @@ export class Users extends BaseEntity {
 
   @Column()
   update_at!: Date
+
 }
+

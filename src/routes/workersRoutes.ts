@@ -10,9 +10,9 @@ router.get ("/", getWorkers)
 router.post ("/", createWorker)
 
 //Actualizar un usuario por el Id
-router.put ("/", updateWorkerById)
+router.put ("/:id", updateWorkerById)
 
 //Eliminar un usuario por el Id
-router.delete ("/", deleteWorkerById)
+router.delete ("/:id", deleteWorkerById)
 
 export {router}

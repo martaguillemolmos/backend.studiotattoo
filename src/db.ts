@@ -5,6 +5,8 @@ import { CreateTableUser1698499884384 } from "./migration/1698499884384-create-t
 import { Users } from "./models/User";
 import { CreateTableWorker1698581245632 } from "./migration/1698581245632-create-table-worker";
 import { Worker } from "./models/Worker";
+import { CreateTableProduct1698678287968 } from "./migration/1698678287968-create-table-product";
+import { Product } from "./models/Product";
 
 type database = "mysql" | "mariadb"
 
@@ -15,8 +17,8 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Users, Worker],
-  migrations: [CreateTableUser1698499884384, CreateTableWorker1698581245632],
+  entities: [Users, Worker, Product],
+  migrations: [CreateTableUser1698499884384, CreateTableWorker1698581245632, CreateTableProduct1698678287968],
   synchronize: false,
   logging: false,
 });

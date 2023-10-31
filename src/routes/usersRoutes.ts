@@ -9,12 +9,13 @@ const router = Router ()
 //Rutas para acceder a la información
 //Acceder a todos los usuarios registrados
 router.get("/", getUser);
-router.get("/login", loginUser);
 // Acceder al perfil de un usuario
 router.get ("/profile", auth, profileUser)
 
 //Crear un usuario
 router.post("/", createUser);
+router.post("/login", loginUser);
+
 
 //Actualizar un usuario por el Id
 router.put("/:id", updateUserById);

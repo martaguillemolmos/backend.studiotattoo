@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Worker } from "./Worker";
 
 const Products = {
@@ -33,17 +40,17 @@ export class Product extends BaseEntity {
   @Column()
   update_at!: Date;
 
-  @ManyToMany ( () => Worker)
-  @JoinTable ({
-    name:"portfolio",
-    joinColumn:{
-        name:"product_id",
-        referencedColumnName: "id",
+  @ManyToMany(() => Worker)
+  @JoinTable({
+    name: "porfolios",
+    joinColumn: {
+      name: "product_id",
+      referencedColumnName: "id",
     },
     inverseJoinColumn: {
-        name:"worker_id",
-        referencedColumnName:"id",
-    }
+      name: "worker_id",
+      referencedColumnName: "id",
+    },
   })
-  productWorkers!:Worker []
+  productWorkers!: Worker[];
 }

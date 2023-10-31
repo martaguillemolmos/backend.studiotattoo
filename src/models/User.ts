@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Worker } from "./Worker";
 
 const Roles = {
   user: 'user',
@@ -39,5 +40,18 @@ export class Users extends BaseEntity {
   @Column()
   update_at!: Date
 
+  @ManyToMany ( () => Worker)
+  @JoinTable ({
+    name:"appointment",
+    joinColumn:{
+        name:"user_id",
+        referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+        name:"worker_id",
+        referencedColumnName:"id",
+    }
+  })
+ userWorkers!:Worker []
 }
 

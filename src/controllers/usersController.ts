@@ -55,9 +55,18 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 const loginUser = async (req: Request, res: Response) => {
-  try {
-    //Lógica para poder acceder
+  //Lógica para poder hacer login
 
+  try {
+    if ((!req.body.email || !req.body.password) || ((req.body.email === "") || (req.body.password === ""))){
+      res.json({
+        success: true,
+        message: "Credenciales incorrectas"
+      })
+    }
+    
+  // Validación de que el email sea @
+  // Validación que el password contiene como mínimo y como máximo.
     // Recuperamos los datos guardados en body
     const { email, password } = req.body;
 
@@ -76,7 +85,7 @@ const loginUser = async (req: Request, res: Response) => {
       // return res.json("Bienvenido " + user.name);
     }
 
-    //generar token
+    //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
     const token = jwt.sign(
       {
         id: user.id,
@@ -129,14 +138,17 @@ const updateUserById = async (req: Request, res: Response) => {
     //Lógica para actualizar usuarios por su Id
     const userId = req.params.id;
     const { name, password } = req.body;
+    const encryptedPassword = bcrypt.hashSync (password, 10)
+
     
     await Users.update(
       {
         id: parseInt(userId),
       },
+      
       {
         name,
-        password
+        password: encryptedPassword
       }
     );
     return res.json("Ha sido actualizado con éxito.");

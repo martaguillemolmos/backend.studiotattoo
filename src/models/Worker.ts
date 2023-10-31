@@ -36,7 +36,7 @@ export class Worker extends BaseEntity {
 
   @ManyToMany ( () => Product)
   @JoinTable ({
-    name:"portfolio",
+    name:"porfolios",
     joinColumn:{
         name:"worker_id",
         referencedColumnName: "id",
@@ -47,4 +47,18 @@ export class Worker extends BaseEntity {
     }
   })
   workerProducts!:Product []
+
+  @ManyToMany ( () => Users)
+  @JoinTable ({
+    name:"appointment",
+    joinColumn:{
+        name:"worker_id",
+        referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+        name:"user_id",
+        referencedColumnName:"id",
+    }
+  })
+  workerUsers!:Users []
 }

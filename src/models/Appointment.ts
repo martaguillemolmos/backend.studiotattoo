@@ -1,0 +1,32 @@
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Portfolio } from "./Portfolio";
+
+@Entity("appointment")
+export class Appointment extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id!: number;
+  
+    @Column()
+    user_id!: number;
+
+    @Column()
+    worker_id!: number;
+  
+    @Column()
+    portfolio_id!: number;
+
+    @Column()
+    portfolio_price!: number;
+
+    @Column()
+    day!: Date;
+  
+    @Column()
+    created_at!: Date;
+  
+    @Column()
+    update_at!: Date;
+
+    @OneToMany (() => Portfolio, (portfolio) => portfolio.appointment)
+    portfolios! : Portfolio []
+}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPortfolio, deletePortfolio, getPortfolio, updatePortfolio } from "../controllers/portfoliosController";
+import { createPortfolio, deletePortfolioById, getPortfolio, updatePortfolioById} from "../controllers/portfoliosController";
 
 const router = Router ()
 
@@ -7,8 +7,8 @@ router.get ("/", getPortfolio)
 
 router.post ("/", createPortfolio)
 
-router.put ("/", updatePortfolio)
+router.put ("/:id", updatePortfolioById)
 
-router.delete ("/", deletePortfolio)
+router.delete ("/:id", deletePortfolioById)
 
 export {router}

@@ -6,6 +6,7 @@ import { router as routerWorker } from "./routes/workersRoutes";
 
 import { AppDataSource } from "./db";
 import { router as routerProduct} from "./routes/productsRoutes";
+import { router as routerPortfolio } from "./routes/portfolioRoutes";
 
 
 const PORT = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ app.use (express.json())
 app.use('/user', routerUser)
 app.use ('/worker', routerWorker)
 app.use ('/product', routerProduct)
+app.use ('/portfolio',  routerPortfolio )
 
 AppDataSource.initialize()
 .then(() => {

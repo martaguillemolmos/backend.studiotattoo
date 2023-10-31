@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Users } from "./User";
+import { Product } from "./Product";
 
 @Entity("workers")
 export class Worker extends BaseEntity {
@@ -32,4 +33,18 @@ export class Worker extends BaseEntity {
   @OneToOne(() => Users)
   @JoinColumn({ name: "user_id" })
   users!: Users;
+
+  @ManyToMany ( () => Product)
+  @JoinTable ({
+    name:"portfolio",
+    joinColumn:{
+        name:"worker_id",
+        referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+        name:"product_id",
+        referencedColumnName:"id",
+    }
+  })
+  workerProducts!:Product []
 }

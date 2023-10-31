@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 
 const getPortfolio = (req: Request, res: Response) => {
+        //Lógica para recuperar la infor de todos nuestros productos
+    
     return res.send ("Todos los portfolios")
 }
 

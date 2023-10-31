@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Marta\",\r\n    \"surname\": \"Guillem\",\r\n    \"phone\": \"62482698\",\r\n    \"email\": \"marta@gmaiil.com\",\r\n    \"password\" : \"1234\"\r\n\r\n}",
+							"raw": "{\r\n    \"name\": \"Toni\",\r\n    \"surname\": \"Olmos\",\r\n    \"phone\": 627555222,\r\n    \"email\": \"toni@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -203,6 +203,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 2,\r\n    \"formation\": \"Nada\",\r\n    \"experience\":\"Poca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:4000/worker/",
 							"host": [
@@ -222,15 +231,24 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"formation\": \"Algo\",\r\n    \"experience\": \"Sí\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:4000/worker/",
+							"raw": "localhost:4000/worker/1",
 							"host": [
 								"localhost"
 							],
 							"port": "4000",
 							"path": [
 								"worker",
-								""
+								"1"
 							]
 						}
 					},
@@ -283,6 +301,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": \"tatuaje hombro\",\r\n    \"price\": 20,\r\n    \"description\": \"20x20\",\r\n    \"image\": \"url\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:4000/product",
 							"host": [
@@ -302,13 +329,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:4000/product",
+							"raw": "localhost:4000/product/2",
 							"host": [
 								"localhost"
 							],
 							"port": "4000",
 							"path": [
-								"product"
+								"product",
+								"2"
 							]
 						}
 					},
@@ -337,6 +365,83 @@
 							"path": [
 								"product",
 								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Portfolio",
+			"item": [
+				{
+					"name": "TODOS LOS PORTFOLIOS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/portfolio",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREAR UN PORTFOLIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/portfolio",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ACTUALIZAR UN PORTFOLIO",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/portfolio",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ELIMINAR UN PORTFOLIO",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/portfolio",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"portfolio"
 							]
 						}
 					},

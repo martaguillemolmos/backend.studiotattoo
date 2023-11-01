@@ -3,12 +3,11 @@ import 'dotenv/config'
 
 import { router as routerUser} from "./routes/usersRoutes"
 import { router as routerWorker } from "./routes/workersRoutes";
-
-import { AppDataSource } from "./db";
 import { router as routerProduct} from "./routes/productsRoutes";
 import { router as routerPortfolio } from "./routes/portfolioRoutes";
 import { router as routerAppointment} from "./routes/appointmentsRoutest";
 
+import { AppDataSource } from "./db";
 
 const PORT = process.env.PORT || 4000;
 

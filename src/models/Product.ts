@@ -10,7 +10,6 @@ import { Worker } from "./Worker";
 
 const Products = {
   tatto: "tatto",
-  tatto_design: "tatto design",
   piercing: "piercing",
 };
 
@@ -42,7 +41,7 @@ export class Product extends BaseEntity {
 
   @ManyToMany(() => Worker)
   @JoinTable({
-    name: "porfolios",
+    name: "portfolios",
     joinColumn: {
       name: "product_id",
       referencedColumnName: "id",

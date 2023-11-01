@@ -16,8 +16,8 @@ export class CreateTableProduct1698678287968 implements MigrationInterface {
           {
             name: "type",
             type: "enum",
-            enum: ["tatto design", "tatto", "piercing"],
-            default: '"tatto design"',
+            enum: ["tatto", "piercing"],
+            default: '"tatto"',
           },
           {
             name: "product",

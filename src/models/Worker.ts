@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne
 import { Users } from "./User";
 import { Product } from "./Product";
 
+
 @Entity("workers")
 export class Worker extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -36,7 +37,7 @@ export class Worker extends BaseEntity {
 
   @ManyToMany ( () => Product)
   @JoinTable ({
-    name:"porfolios",
+    name:"portfolios",
     joinColumn:{
         name:"worker_id",
         referencedColumnName: "id",
@@ -46,7 +47,7 @@ export class Worker extends BaseEntity {
         referencedColumnName:"id",
     }
   })
-  workerProducts!:Product []
+  workerProduct!:Product []
 
   @ManyToMany ( () => Users)
   @JoinTable ({

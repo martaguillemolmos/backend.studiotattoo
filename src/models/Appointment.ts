@@ -20,6 +20,12 @@ export class Appointment extends BaseEntity {
 
     @Column()
     day!: Date;
+
+    @Column()
+    hour!: Date;
+
+    @Column()
+    is_active!: boolean;
   
     @Column()
     created_at!: Date;

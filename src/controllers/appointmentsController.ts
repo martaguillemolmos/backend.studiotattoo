@@ -1,19 +1,100 @@
 import { Request, Response } from "express";
+import { Appointment } from "../models/Appointment";
 
-const createAppointment = (req: Request, res: Response) => {
-    return res.send("Se ha creado la cita")
+const createAppointment = async(req: Request, res: Response) => {
+    try {
+        //Lógica para crear una nueva cita
+        const {worker_id, portfolio_id, day, hour, is_active } = req.body
+        const newAppointment = await Appointment.create({
+            worker_id,
+            portfolio_id,
+            day,
+            hour
+        }).save()
+        return res.json (newAppointment)
+    
+        } catch (error) {
+        console.log(error);
+        return res.json({
+          succes: false,
+          message: "No se ha creado la cita",
+          // esto lo utilizamos para que nos salte el tipo de error
+          error: error,
+        });
+        }
 }
 
 const getAppointments = (req: Request, res: Response) => {
-    return res.send("Información de todas las citas")
+    // Lógica para recuperar todas la información de las citas
+    try {
+        const newAppointment = Appointment.find()
+    return res.json(newAppointment)
+    } catch (error) {
+        console.log(error);
+        return res.json({
+          succes: false,
+          message: "No se ha podido realizar la consulta",
+          // esto lo utilizamos para que nos salte el tipo de error
+          error: error,
+        });
+        }
+    }
+
+
+const updateAppointment = async(req: Request, res: Response) => {
+    try {
+        //Lógica para actualizar portfolio
+            const appointmentId = req.params.id
+            const {worker_id, portfolio_id, day, hour, is_active } = req.body
+        
+            await Appointment.update(
+                {
+                    id: parseInt(appointmentId),
+                  },
+                  {
+                    worker_id,
+                    portfolio_id,
+                    day,
+                    hour,
+                    is_active
+                  }
+            )
+          
+            return res.json ("La cita ha sido actualizada con éxito")
+        } catch (error) {
+            console.log(error);
+            return res.json({
+              succes: false,
+              message: "No se ha actualizado la cita",
+              // esto lo utilizamos para que nos salte el tipo de error
+              error: error,
+            });
+        }
 }
 
-const updateAppointment = (req: Request, res: Response) => {
-    return res.send("Se ha actualizado la cita")
-}
-
-const deleteAppointment = (req: Request, res: Response) => {
-    return res.send("Se ha eliminado la cita")
+const deleteAppointment = async (req: Request, res: Response) => {
+    try {
+        const appointmentIdToDelete = req.params.id
+        const appointmentToRemove = await Appointment.findOneBy (
+            {
+            id: parseInt(appointmentIdToDelete),
+          }
+          )
+      
+          const appointmentRemoved = await Appointment.remove(appointmentToRemove as Appointment);
+          if (appointmentRemoved) {
+            return res.json("Se ha eliminado la cita correctamente");
+          }
+    
+    } catch (error) {
+        console.log(error);
+        return res.json({
+          succes: false,
+          message: "No se ha eliminado la cita",
+          // esto lo utilizamos para que nos salte el tipo de error
+          error: error,
+        });
+    }
 }
 
 export{

@@ -63,9 +63,8 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+//Login
 const loginUser = async (req: Request, res: Response) => {
-  //Lógica para poder hacer login
-
   try {
     if ((!req.body.email || !req.body.password) || ((req.body.email === "") || (req.body.password === ""))){
       res.json({
@@ -94,7 +93,6 @@ const loginUser = async (req: Request, res: Response) => {
     }
     //Si el usuario si es correcto, compruebo la contraseña
     if (bcrypt.compareSync(password.trim(), user.password)) {
-      // return res.json("Bienvenido " + user.name);
     }
   
     //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
@@ -111,7 +109,7 @@ const loginUser = async (req: Request, res: Response) => {
 
     return res.json({
       success: true,
-      message: "User logged successfully",
+      message: `Bienvenid@ a tu perfil, ${user.name}`,
       token: token,
     });
 
@@ -123,13 +121,17 @@ const loginUser = async (req: Request, res: Response) => {
 // una vez ya hemos añadido nuestro middleware, que en este caso es auth, podemos chequear la ruta.
 const profileUser = async(req: any, res: Response) => {
   try {
-      //para saber que usuario está accediendo
+  //para saber que usuario está accediendo
   const user = await Users.findOneBy(
     {
       id:req.token.id
     },
-    
   )
+  // Añadimos que, si el usuario en el momento desactive la cuenta, ya no se le permite acceder a su perfil.
+  if (!user?.is_active == true){
+    return res.status(404).json("Usuario o contraseña incorrecta")
+  }
+
   return res.json({
     message: "Datos del perfil",
     data: user

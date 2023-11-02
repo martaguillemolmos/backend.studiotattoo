@@ -9,7 +9,8 @@ const createAppointment = async(req: Request, res: Response) => {
             worker_id,
             portfolio_id,
             day,
-            hour
+            hour,
+            is_active
         }).save()
         return res.json (newAppointment)
     

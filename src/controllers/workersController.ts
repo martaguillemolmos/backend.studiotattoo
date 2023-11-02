@@ -19,6 +19,7 @@ const getWorkers = async (req: any, res: Response) => {
   }
 };
 
+
 const createWorker = async (req: Request, res: Response) => {
   try {
     const { user_id, formation, experience } = req.body;

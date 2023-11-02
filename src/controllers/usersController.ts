@@ -1,33 +1,36 @@
 import { Request, Response } from "express";
-import { validate } from 'class-validator'
 import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 
+// Crear nuevos usuarios
 const createUser = async (req: Request, res: Response) => {
   //Lógica para crear usuarios
   try {
     // Recuperamos la información que nos envían desde el body
-    const { name, surname, phone, email, password } = req.body;
+    const { name, surname, phone, email, password } = req.body; 
+   
+    //Comprobamos que los campos requeridos para la creación están completos.
+    if((!name || !email || !password) || ((name.trim() == "") || (email.trim() == "") || (password.trim() == "")))
+      res.send({ 
+        message: "Completa los campos obligatorios"
+      });
+    else {
+    // Debemos comprobar que sigue el nombre, email y contraseña cumple con los requisitos.
+     
     // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
     const encryptedPassword = bcrypt.hashSync (password, 10)
-    const newUser = new Users(); 
-    
-    newUser.name = name;
-    newUser.email = email;
-    newUser.surname = surname;
-    newUser.password = encryptedPassword;
-    newUser.phone = phone;
-    
+    const newUser = await Users.create({
+     name,
+     surname,
+     phone,
+     email,
+     password : encryptedPassword
+    }).save();
+    return res.send(newUser);
+    }
 
-    const errors = await validate(newUser);
-     if(errors.length > 0 ){
-      return res.json(errors);
-     } else {
-      const user = await Users.create({...newUser}).save();
-      return res.json(user);
-     }
   } catch (error) {
     console.log(error);
     return res.json({
@@ -37,13 +40,19 @@ const createUser = async (req: Request, res: Response) => {
       error: error,
     });
   }
-};
+}
 
-const getUser = async (req: Request, res: Response) => {
+//Recuperar todos los usuarios
+const getAllUsers = async (req: Request, res: Response) => {
   try {
-    // lógica de la infor que recuperamos la información de TODOS los usuarios
+     // lógica de la infor que recuperamos la información de TODOS los usuarios
     const users = await Users.find();
+    if (users.length == 0){
+      return res.json ("No hay usuarios registrados.")
+    } else {
     return res.json(users);
+    }
+   
   } catch (error) {
     return res.json({
       succes: false,
@@ -136,7 +145,7 @@ const profileUser = async(req: any, res: Response) => {
 const updateUserById = async (req: Request, res: Response) => {
   try {
     //Lógica para actualizar usuarios por su Id
-    const userId = req.params.id;
+    const userId = req.body.id;
     const { name, password } = req.body;
     const encryptedPassword = bcrypt.hashSync (password, 10)
 
@@ -188,4 +197,4 @@ const deleteUserbyId = async(req: Request, res: Response) => {
   }
 };
 
-export { getUser, loginUser, profileUser, createUser, updateUserById, deleteUserbyId };
+export { getAllUsers, loginUser, profileUser, createUser, updateUserById, deleteUserbyId };

@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Portfolio } from "./Portfolio";
+import { Users } from "./User";
 
 @Entity("appointment")
 export class Appointment extends BaseEntity {
@@ -35,4 +36,5 @@ export class Appointment extends BaseEntity {
 
     @OneToMany (() => Portfolio, (portfolio) => portfolio.appointment)
     portfolios! : Portfolio []
+
 }

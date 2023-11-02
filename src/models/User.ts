@@ -52,6 +52,7 @@ export class Users extends BaseEntity {
         referencedColumnName:"id",
     }
   })
+// Aquí nos devuelve una array de objetos, si no indicamos [], tan sólo nos devolvería un objeto.
  userWorkers!:Worker []
 }
 

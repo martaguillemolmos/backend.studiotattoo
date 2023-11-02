@@ -3,34 +3,39 @@ import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
 // Crear nuevos usuarios
 const createUser = async (req: Request, res: Response) => {
   //Lógica para crear usuarios
   try {
     // Recuperamos la información que nos envían desde el body
-    const { name, surname, phone, email, password } = req.body; 
-   
+    const { name, surname, phone, email, password } = req.body;
+
     //Comprobamos que los campos requeridos para la creación están completos.
-    if((!name || !email || !password) || ((name.trim() == "") || (email.trim() == "") || (password.trim() == "")))
-      res.send({ 
-        message: "Completa los campos obligatorios"
+    if (
+      !name ||
+      !email ||
+      !password ||
+      name.trim() == "" ||
+      email.trim() == "" ||
+      password.trim() == ""
+    )
+      res.send({
+        message: "Completa los campos obligatorios",
       });
     else {
-    // Debemos comprobar que sigue el nombre, email y contraseña cumple con los requisitos.
-     
-    // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
-    const encryptedPassword = bcrypt.hashSync (password, 10)
-    const newUser = await Users.create({
-     name: name.trim(),
-     surname: surname.trim(),
-     phone,
-     email: email.trim(),
-     password : encryptedPassword.trim()
-    }).save();
-    return res.send(newUser);
-    }
+      // Debemos comprobar que sigue el nombre, email y contraseña cumple con los requisitos.
 
+      // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
+      const encryptedPassword = bcrypt.hashSync(password, 10);
+      const newUser = await Users.create({
+        name: name.trim(),
+        surname: surname.trim(),
+        phone,
+        email: email.trim(),
+        password: encryptedPassword.trim(),
+      }).save();
+      return res.send(newUser);
+    }
   } catch (error) {
     console.log(error);
     return res.json({
@@ -40,19 +45,18 @@ const createUser = async (req: Request, res: Response) => {
       error: error,
     });
   }
-}
+};
 
 //Recuperar todos los usuarios
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-     // lógica de la infor que recuperamos la información de TODOS los usuarios
+    // lógica de la infor que recuperamos la información de TODOS los usuarios
     const users = await Users.find();
-    if (users.length == 0){
-      return res.json ("No hay usuarios registrados.")
+    if (users.length == 0) {
+      return res.json("No hay usuarios registrados.");
     } else {
-    return res.json(users);
+      return res.json(users);
     }
-   
   } catch (error) {
     return res.json({
       succes: false,
@@ -66,15 +70,20 @@ const getAllUsers = async (req: Request, res: Response) => {
 //Login
 const loginUser = async (req: Request, res: Response) => {
   try {
-    if ((!req.body.email || !req.body.password) || ((req.body.email === "") || (req.body.password === ""))){
+    if (
+      !req.body.email ||
+      !req.body.password ||
+      req.body.email === "" ||
+      req.body.password === ""
+    ) {
       res.json({
         success: true,
-        message: "Credenciales incorrectas"
-      })
+        message: "Credenciales incorrectas",
+      });
     }
-    
-  // Validación de que el email sea @
-  // Validación que el password contiene como mínimo y como máximo.
+
+    // Validación de que el email sea @
+    // Validación que el password contiene como mínimo y como máximo.
     // Recuperamos los datos guardados en body
     const { email, password } = req.body;
 
@@ -88,13 +97,13 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(404).json("Usuario o contraseña incorrecta");
     }
     //Comprobamos si el usuario está activo
-    if (!user.is_active == true){
-      return res.status(404).json("Usuario o contraseña incorrecta")
+    if (!user.is_active == true) {
+      return res.status(404).json("Usuario o contraseña incorrecta");
     }
     //Si el usuario si es correcto, compruebo la contraseña
     if (bcrypt.compareSync(password.trim(), user.password)) {
     }
-  
+
     //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
     const token = jwt.sign(
       {
@@ -112,60 +121,90 @@ const loginUser = async (req: Request, res: Response) => {
       message: `Bienvenid@ a tu perfil, ${user.name}`,
       token: token,
     });
-
   } catch (error) {
     return res.status(500).json(error);
   }
-}
+};
 
-// una vez ya hemos añadido nuestro middleware, que en este caso es auth, podemos chequear la ruta.
-const profileUser = async(req: any, res: Response) => {
+// Profile
+const profileUser = async (req: any, res: Response) => {
   try {
-  //para saber que usuario está accediendo
-  const user = await Users.findOneBy(
-    {
-      id:req.token.id
-    },
-  )
-  // Añadimos que, si el usuario en el momento desactive la cuenta, ya no se le permite acceder a su perfil.
-  if (!user?.is_active == true){
-    return res.status(404).json("Usuario o contraseña incorrecta")
-  }
+    //para saber que usuario está accediendo
+    const user = await Users.findOneBy({
+      id: req.token.id,
+    });
+    // Añadimos que, si el usuario en el momento desactive la cuenta, ya no se le permite acceder a su perfil.
+    if (!user?.is_active == true) {
+      return res.status(404).json("Usuario o contraseña incorrecta");
+    }
 
-  return res.json({
-    message: "Datos del perfil",
-    data: user
-  });
+    return res.json({
+      message: "Datos del perfil",
+      data: user,
+    });
   } catch (error) {
-    return res.json ({
+    return res.json({
       succes: false,
       message: "No se puede procesar la respuesta",
       // esto lo utilizamos para que nos salte el tipo de error
-      error: error
-  })
+      error: error,
+    });
   }
-
 };
 
+// Superadmin pueda actualizar la información de usuario.
 const updateUserById = async (req: Request, res: Response) => {
   try {
     //Lógica para actualizar usuarios por su Id
     const userId = req.body.id;
-    const { name, password } = req.body;
-    const encryptedPassword = bcrypt.hashSync (password, 10)
 
-    
-    await Users.update(
-      {
-        id: parseInt(userId),
-      },
-      
-      {
-        name,
-        password: encryptedPassword
-      }
+    // Añadimos la siguiente función: verificar la contraseña que queremos modificar antes de realizar el cambio.
+    const { name, surname, phone, email, is_active, password, role } = req.body;
+
+    // Comprobamos que el usuario exista y, recuperamos la información de user.name para poder mostrarla más tarde.
+    const user = await Users.findOne({
+      where: { id: parseInt(userId) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    if (password) {
+      const encryptedPassword = bcrypt.hashSync(password, 10);
+      await Users.update(
+        {
+          id: parseInt(userId),
+        },
+        {
+          name: name.trim(),
+          surname: surname.trim(),
+          phone,
+          email: email.trim (),
+          is_active: is_active.trim(),
+          password: encryptedPassword.trim(),
+          role: role.trim(),
+        }
+      );
+    } else {
+      //  Realizar la actualización en el caso que no se introduzca el password
+      await Users.update(
+        {
+          id: parseInt(userId),
+        },
+        {
+          name: name.trim(),
+          surname: surname.trim(),
+          phone,
+          email: email.trim (),
+          is_active: is_active.trim(),
+          role: role.trim(),
+        }
+      );
+    }
+    return res.json(
+      `El usuario de ${user.name},ha sido actualizado con éxito.`
     );
-    return res.json("Ha sido actualizado con éxito.");
   } catch (error) {
     console.log(error);
     return res.json({
@@ -177,21 +216,18 @@ const updateUserById = async (req: Request, res: Response) => {
   }
 };
 
- //Lógica para eliminar usuario por el Id
-const deleteUserbyId = async(req: Request, res: Response) => {
+//Lógica para eliminar usuario por el Id
+const deleteUserbyId = async (req: Request, res: Response) => {
   try {
-     // Recuperamos el valor del id a eliminar por el body.
-      const userIdToDelete = req.body.id;
-      const userToRemove = await Users.findOneBy (
-        {
-        id: parseInt(userIdToDelete),
-      }
-      )
-      const userRemoved = await Users.remove(userToRemove as Users);
-      if (userRemoved) {
-        return res.json("Se ha eliminado el usuario correctamente");
-      }
-
+    // Recuperamos el valor del id a eliminar por el body.
+    const userIdToDelete = req.body.id;
+    const userToRemove = await Users.findOneBy({
+      id: parseInt(userIdToDelete),
+    });
+    const userRemoved = await Users.remove(userToRemove as Users);
+    if (userRemoved) {
+      return res.json("Se ha eliminado el usuario correctamente");
+    }
   } catch (error) {
     console.log(error);
     return res.json({
@@ -202,4 +238,11 @@ const deleteUserbyId = async(req: Request, res: Response) => {
   }
 };
 
-export { getAllUsers, loginUser, profileUser, createUser, updateUserById, deleteUserbyId };
+export {
+  getAllUsers,
+  loginUser,
+  profileUser,
+  createUser,
+  updateUserById,
+  deleteUserbyId,
+};

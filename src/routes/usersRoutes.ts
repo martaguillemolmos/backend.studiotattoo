@@ -18,10 +18,10 @@ router.post("/login", loginUser);
 
 
 //Actualizar un usuario por el Id
-router.put("/:id", updateUserById);
+router.put("/", updateUserById);
 
 //Eliminar un usuario por el Id
-router.delete("/:id", deleteUserbyId);
+router.delete("/", deleteUserbyId);
 
 
 export {router}

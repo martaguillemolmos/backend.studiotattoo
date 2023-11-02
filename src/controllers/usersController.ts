@@ -172,16 +172,16 @@ const updateUserById = async (req: Request, res: Response) => {
   }
 };
 
+ //Lógica para eliminar usuario por el Id
 const deleteUserbyId = async(req: Request, res: Response) => {
   try {
-      //Lógica para eliminar usuario por el Id
-      const userIdToDelete = req.params.id;
+     // Recuperamos el valor del id a eliminar por el body.
+      const userIdToDelete = req.body.id;
       const userToRemove = await Users.findOneBy (
         {
         id: parseInt(userIdToDelete),
       }
       )
-  
       const userRemoved = await Users.remove(userToRemove as Users);
       if (userRemoved) {
         return res.json("Se ha eliminado el usuario correctamente");

@@ -88,12 +88,15 @@ const loginUser = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json("Usuario o contraseña incorrecta");
     }
-
+    //Comprobamos si el usuario está activo
+    if (!user.is_active == true){
+      return res.status(404).json("Usuario o contraseña incorrecta")
+    }
     //Si el usuario si es correcto, compruebo la contraseña
     if (bcrypt.compareSync(password.trim(), user.password)) {
       // return res.json("Bienvenido " + user.name);
     }
-
+  
     //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
     const token = jwt.sign(
       {

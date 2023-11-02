@@ -35,6 +35,7 @@ export class Appointment extends BaseEntity {
     @Column()
     update_at!: Date;
 
+    //Declaramos la relación que existe entre esta tabla y la tabla Portfolio.
     @OneToMany (() => Portfolio, (portfolio) => portfolio.appointment)
     portfolios! : Portfolio []
 

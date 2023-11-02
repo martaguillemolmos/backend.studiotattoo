@@ -4,9 +4,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Worker } from "./Worker";
+import { Portfolio } from "./Portfolio";
 
 const Products = {
   tatto: "tatto",
@@ -39,6 +41,8 @@ export class Product extends BaseEntity {
   @Column()
   update_at!: Date;
 
+
+  //Declaramos la relación muchos a muchos que existe con la tabla Worker.
   @ManyToMany(() => Worker)
   @JoinTable({
     name: "portfolios",
@@ -52,4 +56,8 @@ export class Product extends BaseEntity {
     },
   })
   productWorkers!: Worker[];
+
+  //Declaramos la relación que existe entre Product y la tabla intermedia, Portfolio
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.worker)
+  portfolios!: Portfolio[];
 }

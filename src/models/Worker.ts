@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMan
 import { Users } from "./User";
 import { Product } from "./Product";
 import { Appointment } from "./Appointment";
+import { Portfolio } from "./Portfolio";
 
 
 @Entity("workers")
@@ -32,10 +33,13 @@ export class Worker extends BaseEntity {
 
   update_at!: Date;
 
+
+//Declaramos la relación uno a uno que existe entre la tabla Users.
   @OneToOne(() => Users)
   @JoinColumn({ name: "user_id" })
   users!: Users;
 
+  //Declaramos la relación muchos a muchos que existe con la tabla Product.
   @ManyToMany ( () => Product)
   @JoinTable ({
     name:"portfolios",
@@ -50,6 +54,7 @@ export class Worker extends BaseEntity {
   })
   workerProduct!:Product []
 
+  //Declaramos la relación muchos a muchos que existe con la tabla Users.
   @ManyToMany ( () => Users)
   @JoinTable ({
     name:"appointment",
@@ -67,4 +72,8 @@ export class Worker extends BaseEntity {
   //Declaramos la relación que existe entre Worker y la tabla intermedia, Appoiment
  @OneToMany ( () => Appointment, (appointment) => appointment.worker)
  appointments! : Appointment [];
+
+  //Declaramos la relación que existe entre Worker y la tabla intermedia, Portfolio
+   @OneToMany ( () => Portfolio, (portfolio) => portfolio.worker)
+   portfolios! : Portfolio [];
 }

@@ -22,11 +22,11 @@ const createUser = async (req: Request, res: Response) => {
     // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
     const encryptedPassword = bcrypt.hashSync (password, 10)
     const newUser = await Users.create({
-     name,
-     surname,
+     name: name.trim(),
+     surname: surname.trim(),
      phone,
-     email,
-     password : encryptedPassword
+     email: email.trim(),
+     password : encryptedPassword.trim()
     }).save();
     return res.send(newUser);
     }
@@ -81,7 +81,7 @@ const loginUser = async (req: Request, res: Response) => {
 
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
-      email,
+      email: email.trim(),
     });
 
     // En el caso que el usuario no sea el mismo
@@ -90,7 +90,7 @@ const loginUser = async (req: Request, res: Response) => {
     }
 
     //Si el usuario si es correcto, compruebo la contraseña
-    if (bcrypt.compareSync(password, user.password)) {
+    if (bcrypt.compareSync(password.trim(), user.password)) {
       // return res.json("Bienvenido " + user.name);
     }
 

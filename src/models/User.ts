@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Worker } from "./Worker";
+import { Appointment } from "./Appointment";
 
 const Roles = {
   user: 'user',
@@ -53,6 +54,10 @@ export class Users extends BaseEntity {
     }
   })
 // Aquí nos devuelve una array de objetos, si no indicamos [], tan sólo nos devolvería un objeto.
- userWorkers!:Worker []
+ userWorkers!:Worker [];
+
+ //Declaramos la relación que existe entre User y la tabla intermedia, Appoiment
+ @OneToMany ( () => Appointment, (appointment) => appointment.user)
+ appointments! : Appointment [];
 }
 

@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Portfolio } from "./Portfolio";
 import { Users } from "./User";
+import { Worker } from "./Worker";
 
 @Entity("appointment")
 export class Appointment extends BaseEntity {
@@ -37,4 +38,13 @@ export class Appointment extends BaseEntity {
     @OneToMany (() => Portfolio, (portfolio) => portfolio.appointment)
     portfolios! : Portfolio []
 
+    //Declaramos la relación que existe entre esta tabla y Users.
+    @ManyToOne ( () => Users , (user) => user.appointments)
+    @JoinColumn ({ name: "user_id"})
+    user!: Users [];
+
+    //Declaramos la relación que existe entre esta tabla y Worker.
+     @ManyToOne ( () => Worker, (worker) => worker.appointments)
+     @JoinColumn ({ name: "worker_id"})
+     worker!: Worker [];
 }

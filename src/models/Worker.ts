@@ -1,6 +1,7 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Users } from "./User";
 import { Product } from "./Product";
+import { Appointment } from "./Appointment";
 
 
 @Entity("workers")
@@ -62,4 +63,8 @@ export class Worker extends BaseEntity {
     }
   })
   workerUsers!:Users []
+
+  //Declaramos la relación que existe entre Worker y la tabla intermedia, Appoiment
+ @OneToMany ( () => Appointment, (appointment) => appointment.worker)
+ appointments! : Appointment [];
 }

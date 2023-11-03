@@ -3,6 +3,49 @@ import { Worker } from "../models/Worker";
 import { Users } from "../models/User";
 import { error } from "console";
 
+//Crear un nuevo trabajador
+const createWorker = async (req: Request, res: Response) => {
+  try {
+    const { user_id} = req.body;
+
+    //Buscamos el usuario correspondiente de la tabla usuarios
+    const user = await Users.findOneBy({ id: user_id });
+
+    if (!user) {
+      return res.json({
+        succes: false,
+        message: "No se ha encontrado el usuario",
+        error: error,
+      });
+    }
+
+    //Modificamos el rol del usuario a "admin"
+    user.role = "admin";
+    await user.save();
+
+    //Añadimos los siguientes campos con un mensaje por defecto:
+     const defaultFormation = "¡Bienvenido al equipo!, introduce aquí tu formación."
+     const defaultExperience = "¡Bienvenido al equipo!, introduce aquí tu experiencia."
+
+    // Por último, creamos el nuevo trabajadr
+    const newWorker = await Worker.create({
+      user_id,
+      formation: defaultFormation,
+      experience: defaultExperience,
+    }).save();
+    return res.json(newWorker);
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No hemos creado ningun trabajador",
+      // esto lo utilizamos para que nos salte el tipo de error
+      error: error,
+    });
+  }
+};
+
+// El superAdmin pueda acceder a todos los trabajadores.
 const getAllWorkers = async (req: any, res: Response) => {
   //lógica para crear un nuevo trabajador.
   try {
@@ -23,44 +66,6 @@ const getAllWorkers = async (req: any, res: Response) => {
   }
 };
 
-//Crear un nuevo trabajador
-const createWorker = async (req: Request, res: Response) => {
-  try {
-    const { user_id, formation, experience } = req.body;
-    console.log(req.body);
-
-    //Buscamos el usuario correspondiente de la tabla usuarios
-
-    const user = await Users.findOneBy({ id: user_id });
-
-    if (!user) {
-      return res.json({
-        succes: false,
-        message: "No se ha encontrado el usuario",
-        error: error,
-      });
-    }
-    //Modificamos el rol del usuario a "admin"
-    user.role = "admin";
-    await user.save();
-
-    // Por último, creamos el nuevo trabajadr
-    const newWorker = await Worker.create({
-      user_id,
-      formation,
-      experience,
-    }).save();
-    return res.json(newWorker);
-  } catch (error) {
-    console.log(error);
-    return res.json({
-      succes: false,
-      message: "No hemos creado ningun trabajador",
-      // esto lo utilizamos para que nos salte el tipo de error
-      error: error,
-    });
-  }
-};
 
 const updateWorkerById = async (req: Request, res: Response) => {
   try {

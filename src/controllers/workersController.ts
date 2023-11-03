@@ -7,8 +7,11 @@ const getWorkers = async (req: any, res: Response) => {
   //lógica para crear un nuevo trabajador.
   try {
     const workers = await Worker.find({ relations: ["users"] });
-    return res.json(workers);
-  
+    if (workers.length == 0) {
+      return res.json("No hay trabajadores registrados.");
+    } else {
+      return res.json(workers);
+    }
   } catch (error) {
     console.log(error);
     return res.json({

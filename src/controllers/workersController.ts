@@ -3,7 +3,7 @@ import { Worker } from "../models/Worker";
 import { Users } from "../models/User";
 import { error } from "console";
 
-const getWorkers = async (req: any, res: Response) => {
+const getAllWorkers = async (req: any, res: Response) => {
   //lógica para crear un nuevo trabajador.
   try {
     const workers = await Worker.find({ relations: ["users"] });
@@ -126,4 +126,4 @@ const deleteWorkerById = async (req: Request, res: Response) => {
   }
 };
 
-export { getWorkers, createWorker, updateWorkerById, deleteWorkerById };
+export { getAllWorkers, createWorker, updateWorkerById, deleteWorkerById };

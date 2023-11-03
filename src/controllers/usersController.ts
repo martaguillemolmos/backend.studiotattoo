@@ -300,7 +300,7 @@ const updatePassword = async (req: Request, res: Response) => {
 };
 
 //Lógica para eliminar usuario por el Id
-const deleteUserbyId = async (req: Request, res: Response) => {
+const deleteUserById = async (req: Request, res: Response) => {
   try {
     // Recuperamos el valor del id a eliminar por el body.
     const userIdToDelete = req.body.id;
@@ -328,5 +328,5 @@ export {
   createUser,
   updateUser,
   updatePassword,
-  deleteUserbyId,
+  deleteUserById,
 };

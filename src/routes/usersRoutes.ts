@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUserbyId, getAllUsers,  loginUser, profileUser, updatePassword, updateUser} from "../controllers/usersController";
+import { createUser, deleteUserById, getAllUsers,  loginUser, profileUser, updatePassword, updateUser} from "../controllers/usersController";
 import { auth } from "../middelware/auth";
 import { isSuperAdmin } from "../middelware/isSuperAdmin";
 
@@ -24,7 +24,7 @@ router.patch("/password", auth, updatePassword);
 router.put("/:id?", auth, updateUser);
 
 //Eliminar un usuario por el Id, sólo el superadmin.
-router.delete("/",auth, isSuperAdmin, deleteUserbyId);
+router.delete("/",auth, isSuperAdmin, deleteUserById);
 
 export {router}
 

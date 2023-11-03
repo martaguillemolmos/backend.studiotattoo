@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { createWorker, deleteWorkerById, getAllWorkers, updateWorkerById } from "../controllers/workersController";
+import { auth } from "../middelware/auth";
+import { isSuperAdmin } from "../middelware/isSuperAdmin";
 
 const router = Router ()
 
 //Recuperar información de todos los trabajadores
-router.get ("/", getAllWorkers)
+router.get ("/", auth, isSuperAdmin, getAllWorkers)
 
 //Crear un trabajador
 router.post ("/", createWorker)

@@ -65,7 +65,11 @@ const getAllUsers = async (req: Request, res: Response) => {
   try {
     // lógica de la infor que recuperamos la información de TODOS los usuarios
     const users = await Users.find();
-   
+    if (users.length == 0) {
+      return res.json("No hay usuarios registrados.");
+    } else {
+      return res.json(users);
+    }
   } catch (error) {
     return res.json({
       succes: false,

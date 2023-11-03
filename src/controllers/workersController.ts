@@ -19,7 +19,7 @@ const getWorkers = async (req: any, res: Response) => {
   }
 };
 
-
+//Crear un nuevo trabajador
 const createWorker = async (req: Request, res: Response) => {
   try {
     const { user_id, formation, experience } = req.body;
@@ -58,6 +58,7 @@ const createWorker = async (req: Request, res: Response) => {
   }
 
 };
+
 
 const updateWorkerById = async (req: Request, res: Response) => {
   try {

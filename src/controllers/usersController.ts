@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { validate } from "class-validator";
 
 // Crear nuevos usuarios
 const createUser = async (req: Request, res: Response) => {
@@ -19,20 +20,32 @@ const createUser = async (req: Request, res: Response) => {
       email.trim() == "" ||
       password.trim() == ""
     )
-      res.send({
+      return res.send({
         message: "Completa los campos obligatorios",
       });
     else {
       // Debemos comprobar que sigue el nombre, email y contraseña cumple con los requisitos.
 
       // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
-      const encryptedPassword = bcrypt.hashSync(password, 10);
+      const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
+      const Uservalidate = new Users();
+      Uservalidate.name = name;
+      Uservalidate.surname =surname;
+      Uservalidate.phone = phone;
+      Uservalidate.email = email;
+      Uservalidate.password = password
+
+      const errorValidate = await validate(Uservalidate);
+
+      if(errorValidate.length>0){
+        return res.status(404).json(errorValidate);
+      }
       const newUser = await Users.create({
         name: name.trim(),
         surname: surname.trim(),
         phone,
         email: email.trim(),
-        password: encryptedPassword.trim(),
+        password: encryptedPassword,
       }).save();
       return res.send(newUser);
     }
@@ -70,13 +83,15 @@ const getAllUsers = async (req: Request, res: Response) => {
 //Login
 const loginUser = async (req: Request, res: Response) => {
   try {
+     // Recuperamos los datos guardados en body
+     const { email, password } = req.body;
     if (
       !req.body.email ||
       !req.body.password ||
-      req.body.email === "" ||
-      req.body.password === ""
+      req.body.email.trim() === "" ||
+      req.body.password.trim() === ""
     ) {
-      res.json({
+      return res.json({
         success: true,
         message: "Credenciales incorrectas",
       });
@@ -84,9 +99,7 @@ const loginUser = async (req: Request, res: Response) => {
 
     // Validación de que el email sea @
     // Validación que el password contiene como mínimo y como máximo.
-    // Recuperamos los datos guardados en body
-    const { email, password } = req.body;
-
+   
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
       email: email.trim(),
@@ -101,27 +114,28 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(404).json("Usuario no activo.");
     }
     //Si el usuario si es correcto, compruebo la contraseña
+    console.log(user.password)
     if (bcrypt.compareSync(password.trim(), user.password)) {
+      //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
+      const token = jwt.sign(
+        {
+          id: user.id,
+          role: user.role,
+          is_active: user.is_active,
+        },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "2h",
+        }
+      );
+      return res.json({
+        success: true,
+        message: `Bienvenid@ a tu perfil, ${user.name}`,
+        token: token,
+      });
+    } else {
+      return res.status(403).json ({ message: "Usuario o contraseña incorrecta."})
     }
-
-    //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
-    const token = jwt.sign(
-      {
-        id: user.id,
-        role: user.role,
-        is_active: user.is_active
-      },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "2h",
-      }
-    );
-
-    return res.json({
-      success: true,
-      message: `Bienvenid@ a tu perfil, ${user.name}`,
-      token: token,
-    });
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -138,7 +152,7 @@ const profileUser = async (req: any, res: Response) => {
     if (!user) {
       return res.status(403).json("Usuario o contraseña incorrecta.");
     }
-    
+
     if (!user?.is_active) {
       return res.status(404).json("Usuario no activo.");
     }
@@ -157,62 +171,64 @@ const profileUser = async (req: any, res: Response) => {
   }
 };
 
-// Un usuario pueda modificar datos de su cuenta o inactivarla.
+// Superadmin y usuario puede actualizar la información de usuario, dependiendo de la ruta.
 const updateUser = async (req: Request, res: Response) => {
   try {
-
-    //Lógica actualizar usuario superadmin
+    
     let user;
-    if(req.token.role == 'super_admin' && req.token.is_active == true && req.params.id){
-      console.log(req.params.id)
+    if (
+      req.token.role == "super_admin" &&
+      req.token.is_active == true &&
+      req.params.id
+    ) {
+      console.log(req.params.id);
       user = await Users.findOne({
-        where: {id: parseInt(req.params.id)},
-      })
-    } else if( req.token.role !== 'super_admin' && req.token.is_active == true){
-    //Lógica para actualizar usuarios por su Id
+        where: { id: parseInt(req.params.id) },
+      });
+    } else if (
+      req.token.role !== "super_admin" &&
+      req.token.is_active == true
+    ) {
+      //Lógica para actualizar usuarios por su Id
       user = await Users.findOne({
-      where: { id: req.token.id },
-    });
+        where: { id: req.token.id },
+      });
     } else {
-      return res.status(403).json({ message: "Usuario no autorizado"});
+      return res.status(403).json({ message: "Usuario no autorizado" });
     }
 
-
-    // Añadimos la siguiente función: verificar la contraseña que queremos modificar antes de realizar el cambio.
-    const { name, surname, phone, email, is_active, password, passwordOld } =
-      req.body;
+    // Indicamos los datos que se pueden actualizar a través de esta ruta.
+    const { name, surname, phone, email, is_active } = req.body;
 
     //Comprobamos que el usuario exista
     if (!user) {
-      return res.status(403).json({ message: "Usuario no encontrado"});
+      return res.status(403).json({ message: "Usuario no encontrado" });
     }
-      // Comprobamos que la contraseña que se quiere modificar, no sea la misma que la actual y que coincida.
-        //  Realizar la actualización en el caso que no se quiera actualizar el password
-      let id;
+    // Declaramos el id, de esta forma, podemos indicar en el caso que sea super admin, el id del usuario que queremos modificar lo recuperaremos de la búsqueda o bien,
+    //en el caso que sea el propio usuario que quiera modificar sus datos, el id lo recuperamos del token.
+    let id;
 
-      if( req.token.role === 'super_admin' && req.params.id){
-        id = parseInt(req.params.id);
-      } else {
-        id = req.token.id;
+    if (req.token.role === "super_admin" && req.params.id) {
+      id = parseInt(req.params.id);
+    } else {
+      id = req.token.id;
+    }
+    await Users.update(
+      {
+        id: id,
+      },
+      {
+        name,
+        surname,
+        phone,
+        email,
+        is_active,
       }
-      await Users.update(
-        {
-          id: id,
-        },
-        {
-          name,
-          surname,
-          phone,
-          email,
-          is_active,
-        }
-      );
-      
-      return res.json(
-        `El usuario de ${name},ha sido actualizado con éxito.`
-      );
-    } catch (error) {
-    console.log("error",error);
+    );
+
+    return res.json(`El usuario de ${name},ha sido actualizado con éxito.`);
+  } catch (error) {
+    console.log("error", error);
     return res.json({
       succes: false,
       message: "El usuario no ha sido actualizado.",
@@ -221,59 +237,57 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-// Superadmin y usuario puede actualizar la información de usuario, dependiendo de la ruta.
-const updateUsersById = async (req: Request, res: Response) => {
+// Usuario puede actualizar el password.
+const updatePassword = async (req: Request, res: Response) => {
   try {
-    //Lógica para actualizar usuarios por su Id
-    const userId = req.body.id;
+    //Lógica actualizar el password
+    let user;
 
-    // Añadimos la siguiente función: verificar la contraseña que queremos modificar antes de realizar el cambio.
-    const { name, surname, phone, email, is_active, password, role } = req.body;
-
-    // Comprobamos que el usuario exista y, recuperamos la información de user.name para poder mostrarla más tarde.
-    const user = await Users.findOne({
-      where: { id: parseInt(userId) },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    if (password) {
-      const encryptedPassword = bcrypt.hashSync(password, 10);
-      await Users.update(
-        {
-          id: parseInt(userId),
-        },
-        {
-          name,
-          surname,
-          phone,
-          email,
-          is_active,
-          password: encryptedPassword,
-          role,
-        }
-      );
+    if (req.token.is_active == true) {
+      //Lógica para actualizar usuarios por su Id
+      user = await Users.findOne({
+        where: { id: req.token.id },
+      });
     } else {
-      //  Realizar la actualización en el caso que no se introduzca el password
-      await Users.update(
-        {
-          id: parseInt(userId),
-        },
-        {
-          name,
-          surname,
-          phone,
-          email,
-          is_active,
-          role,
-        }
-      );
+      return res.status(403).json({ message: "Usuario no autorizado" });
     }
-    return res.json(
-      `El usuario de ${user.name},ha sido actualizado con éxito.`
-    );
+
+    // Campos que nos pueden enviar a través del body para ser modificados.
+    const { password, passwordOld } = req.body;
+    if (password.trim() == ""){
+      return res.json ("Debes añadir un campo.")
+    }
+
+    //Comprobamos que el usuario exista
+    if (!user) {
+      return res.status(403).json({ message: "Usuario no encontrado" });
+    }
+
+
+    if (passwordOld !== password) {
+
+      if (bcrypt.compareSync(passwordOld, user.password)) {
+        console.log("aqui entra");
+        const encryptedPassword = bcrypt.hashSync(password, 10);
+        await Users.update(
+          {
+            id: req.token.id,
+          },
+          {
+            password: encryptedPassword,
+          }
+        );
+        return res.status(202).json("Contraseña modificada")
+      } else {
+        return res.status(401).json({
+          message: "La contraseña no coincide, vuelva a intentarlo.",
+        });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ message: "Recuerda: La contraseña debe ser diferente." });
+    }
   } catch (error) {
     console.log(error);
     return res.json({
@@ -313,6 +327,6 @@ export {
   profileUser,
   createUser,
   updateUser,
-  updateUsersById,
+  updatePassword,
   deleteUserbyId,
 };

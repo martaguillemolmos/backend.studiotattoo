@@ -8,8 +8,8 @@ const router = Router ()
 // Cremos rutas para usuarios
 
 //Rutas para acceder a la información
-//Acceder a todos los usuarios registrados
-router.get("/", getAllUsers);
+//Sólo el superadmin pueda acceder a todos los usuarios registrados
+router.get("/", auth, isSuperAdmin, getAllUsers);
 // Acceder al perfil de un usuario
 router.get ("/profile", auth, profileUser)
 

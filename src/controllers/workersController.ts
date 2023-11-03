@@ -3,7 +3,7 @@ import { Worker } from "../models/Worker";
 import { Users } from "../models/User";
 import { error } from "console";
 
-//Crear un nuevo trabajador
+//Crear un nuevo trabajador.
 const createWorker = async (req: Request, res: Response) => {
   try {
     const { user_id} = req.body;

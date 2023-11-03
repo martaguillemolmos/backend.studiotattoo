@@ -5,11 +5,11 @@ import { isSuperAdmin } from "../middelware/isSuperAdmin";
 
 const router = Router ()
 
-//Recuperar información de todos los trabajadores
-router.get ("/", auth, isSuperAdmin, getAllWorkers)
+//Super_Admin: Crear un nuevo trabajador
+router.post ("/", auth, isSuperAdmin, createWorker)
 
-//Crear un trabajador
-router.post ("/", createWorker)
+//Super_Admin: Recuperar información de todos los trabajadores
+router.get ("/", auth, isSuperAdmin, getAllWorkers)
 
 //Actualizar un usuario por el Id
 router.put ("/:id", updateWorkerById)

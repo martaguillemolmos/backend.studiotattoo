@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUserbyId, getAllUsers,  loginUser, profileUser, updateUserById} from "../controllers/usersController";
+import { createUser, deleteUserbyId, getAllUsers,  loginUser, profileUser, updateUser, updateUsersById} from "../controllers/usersController";
 import { auth } from "../middelware/auth";
 
 const router = Router ()
@@ -14,11 +14,13 @@ router.get ("/profile", auth, profileUser)
 
 //Crear un usuario
 router.post("/", createUser);
+// Login
 router.post("/login", loginUser);
 
-
-//Actualizar un usuario por el Id
-router.put("/", updateUserById);
+//Un usuario actualiza 
+router.put("/:id?", auth, updateUser);
+//Superadmin pueda actualizar un usuario por el id
+router.put("/update", updateUsersById);
 
 //Eliminar un usuario por el Id
 router.delete("/", deleteUserbyId);

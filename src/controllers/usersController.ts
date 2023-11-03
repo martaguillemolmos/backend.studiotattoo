@@ -94,11 +94,11 @@ const loginUser = async (req: Request, res: Response) => {
 
     // En el caso que el usuario no sea el mismo
     if (!user) {
-      return res.status(404).json("Usuario o contraseña incorrecta");
+      return res.status(403).json("Usuario o contraseña incorrecta");
     }
     //Comprobamos si el usuario está activo
-    if (!user.is_active == true) {
-      return res.status(404).json("Usuario o contraseña incorrecta");
+    if (!user?.is_active) {
+      return res.status(404).json("Usuario no activo.");
     }
     //Si el usuario si es correcto, compruebo la contraseña
     if (bcrypt.compareSync(password.trim(), user.password)) {
@@ -109,6 +109,7 @@ const loginUser = async (req: Request, res: Response) => {
       {
         id: user.id,
         role: user.role,
+        is_active: user.is_active
       },
       process.env.JWT_SECRET as string,
       {
@@ -134,8 +135,12 @@ const profileUser = async (req: any, res: Response) => {
       id: req.token.id,
     });
     // Añadimos que, si el usuario en el momento desactive la cuenta, ya no se le permite acceder a su perfil.
-    if (!user?.is_active == true) {
-      return res.status(404).json("Usuario o contraseña incorrecta");
+    if (!user) {
+      return res.status(403).json("Usuario o contraseña incorrecta.");
+    }
+    
+    if (!user?.is_active) {
+      return res.status(404).json("Usuario no activo.");
     }
 
     return res.json({
@@ -152,8 +157,72 @@ const profileUser = async (req: any, res: Response) => {
   }
 };
 
-// Superadmin pueda actualizar la información de usuario.
-const updateUserById = async (req: Request, res: Response) => {
+// Un usuario pueda modificar datos de su cuenta o inactivarla.
+const updateUser = async (req: Request, res: Response) => {
+  try {
+
+    //Lógica actualizar usuario superadmin
+    let user;
+    if(req.token.role == 'super_admin' && req.token.is_active == true && req.params.id){
+      console.log(req.params.id)
+      user = await Users.findOne({
+        where: {id: parseInt(req.params.id)},
+      })
+    } else if( req.token.role !== 'super_admin' && req.token.is_active == true){
+    //Lógica para actualizar usuarios por su Id
+      user = await Users.findOne({
+      where: { id: req.token.id },
+    });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado"});
+    }
+
+
+    // Añadimos la siguiente función: verificar la contraseña que queremos modificar antes de realizar el cambio.
+    const { name, surname, phone, email, is_active, password, passwordOld } =
+      req.body;
+
+    //Comprobamos que el usuario exista
+    if (!user) {
+      return res.status(403).json({ message: "Usuario no encontrado"});
+    }
+      // Comprobamos que la contraseña que se quiere modificar, no sea la misma que la actual y que coincida.
+        //  Realizar la actualización en el caso que no se quiera actualizar el password
+      let id;
+
+      if( req.token.role === 'super_admin' && req.params.id){
+        id = parseInt(req.params.id);
+      } else {
+        id = req.token.id;
+      }
+      await Users.update(
+        {
+          id: id,
+        },
+        {
+          name,
+          surname,
+          phone,
+          email,
+          is_active,
+        }
+      );
+      
+      return res.json(
+        `El usuario de ${name},ha sido actualizado con éxito.`
+      );
+    } catch (error) {
+    console.log("error",error);
+    return res.json({
+      succes: false,
+      message: "El usuario no ha sido actualizado.",
+      error: error,
+    });
+  }
+};
+
+// Superadmin y usuario puede actualizar la información de usuario, dependiendo de la ruta.
+const updateUsersById = async (req: Request, res: Response) => {
   try {
     //Lógica para actualizar usuarios por su Id
     const userId = req.body.id;
@@ -177,13 +246,13 @@ const updateUserById = async (req: Request, res: Response) => {
           id: parseInt(userId),
         },
         {
-          name: name.trim(),
-          surname: surname.trim(),
+          name,
+          surname,
           phone,
-          email: email.trim (),
-          is_active: is_active.trim(),
-          password: encryptedPassword.trim(),
-          role: role.trim(),
+          email,
+          is_active,
+          password: encryptedPassword,
+          role,
         }
       );
     } else {
@@ -193,12 +262,12 @@ const updateUserById = async (req: Request, res: Response) => {
           id: parseInt(userId),
         },
         {
-          name: name.trim(),
-          surname: surname.trim(),
+          name,
+          surname,
           phone,
-          email: email.trim (),
-          is_active: is_active.trim(),
-          role: role.trim(),
+          email,
+          is_active,
+          role,
         }
       );
     }
@@ -243,6 +312,7 @@ export {
   loginUser,
   profileUser,
   createUser,
-  updateUserById,
+  updateUser,
+  updateUsersById,
   deleteUserbyId,
 };

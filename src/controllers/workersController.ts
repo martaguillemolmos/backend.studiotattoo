@@ -139,30 +139,18 @@ const updateWorkerById = async (req: Request, res: Response) => {
 
 const deleteWorkerById = async (req: Request, res: Response) => {
   try {
-    //Lógica para eliminar trabajador por el Id
-    const workerIdToDelete = req.params.id;
+    // Recuperamos el valor del id a eliminar por el body.
+    const workerIdToDelete = req.body.id;
     const workerToRemove = await Worker.findOneBy({
       id: parseInt(workerIdToDelete),
     });
-    //Si no existe, enviamos el mensaje
-    if (!workerToRemove) {
-      return res.status(404).json("No hemos encontrado el trabajador");
-    }
-    // Buscamos en la tabla el user_id correspondiente a ese trabajador
-    const user = await Users.findOneBy({ id: workerToRemove.user_id });
-
-    if (!user) {
-      return res.status(404).json("No hemos encontrado el usuario");
-    } else {
-      //Modificamos el rol del usuario a "admin"
-      user.role = "user";
-      await user.save();
-    }
-
-    //Eliminamos el trabajador
-    const workerRemoved = await Worker.remove(workerToRemove as Worker);
-    if (workerRemoved) {
-      return res.json("Se ha eliminado el trabajador correctamente");
+      const workerRemoved = await Worker.remove(workerToRemove as Worker);
+      if (workerRemoved) {
+        return res.json("Se ha eliminado el usuario correctamente");
+      } else {
+      return res.json(
+        "No se puede eliminar el usuario, porque es super_admin."
+      );
     }
   } catch (error) {
     console.log(error);

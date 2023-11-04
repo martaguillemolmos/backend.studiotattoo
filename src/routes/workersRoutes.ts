@@ -15,6 +15,6 @@ router.get ("/", auth, isSuperAdmin, getAllWorkers)
 router.put ("/:id?",auth, updateWorkerById)
 
 //Eliminar un usuario por el Id
-router.delete ("/:id", deleteWorkerById)
+router.delete ("/", auth, isSuperAdmin, deleteWorkerById)
 
 export {router}

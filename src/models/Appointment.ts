@@ -3,6 +3,13 @@ import { Portfolio } from "./Portfolio";
 import { Users } from "./User";
 import { Worker } from "./Worker";
 
+const Status = { 
+    pending: 'pending',
+    approved: 'approved',
+    canceled: 'canceled',
+    made: 'made'
+  }
+
 @Entity("appointment")
 export class Appointment extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -26,8 +33,8 @@ export class Appointment extends BaseEntity {
     @Column()
     hour!: Date;
 
-    @Column()
-    is_active!: boolean;
+    @Column({type:"enum", enum: Status})
+    status_appointment!: string;
   
     @Column()
     created_at!: Date;

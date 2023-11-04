@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
 
+// Usuario: Crear una cita
 const createAppointment = async(req: Request, res: Response) => {
     try {
         //Lógica para crear una nueva cita

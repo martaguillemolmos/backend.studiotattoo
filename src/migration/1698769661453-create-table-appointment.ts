@@ -26,11 +26,6 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
             type: "int",
           },
           {
-            name: "portfolio_price",
-            type: "int",
-            length: "6",
-          },
-          {
             name: "day",
             type: "date",
           },
@@ -39,9 +34,10 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
             type: "date",
           },
           {
-            name: "is_active",
-            type: "boolean",
-            default: "false",
+            name: "status_appointment",
+            type: "enum",
+            enum: ["pending", "approved", "canceled", "made"],
+            default: '"pending"'
           },
           {
             name: "created_at",

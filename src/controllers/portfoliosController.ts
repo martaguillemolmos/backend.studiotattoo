@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import { Portfolio } from "../models/Portfolio";
+import { Users } from "../models/User";
+import { Worker } from "../models/Worker";
 
 // Recuperar todos los portfolios
 //-- Me gustaría optimizar: cuando nos devuelve los resultados, que nos devuelva información del usuario y los datos organizados.
 const getPortfolio = async (req: Request, res: Response) => {
   try {
-    const portfolios = await Portfolio.find({ relations: ["workerAppointment", "portfolioWorker"]});
+    const portfolios = await Portfolio.find({
+      relations: ["workerAppointment", "portfolioWorker"],
+    });
     return res.json(portfolios);
   } catch (error) {
     console.log(error);
@@ -21,22 +25,41 @@ const getPortfolio = async (req: Request, res: Response) => {
 // Super_admin y Admin: Crear un portfolio
 const createPortfolio = async (req: Request, res: Response) => {
   try {
-      const { worker_id, product_id } = req.body;
+    let worker;
+    if (
+      req.token.role == "super_admin" &&
+      req.token.is_active == true &&
+      req.params.id
+    ) {
+      console.log(req.params.id);
+      worker = await Worker.findOne({
+        where: { id: parseInt(req.params.id) },
+      });
+      console.log("Este es el id que hemos enviado", worker);
+    } else if (
+      req.token.role !== "super_admin" &&
+      req.token.is_active == true
+    ) {
+      worker = await Worker.findOne({
+        where: { user_id: req.token.id },
+      });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado" });
+    }
+    const { product_id } = req.body;
+    const newPortfolio = await Portfolio.create({
+      worker_id: worker?.id,
+      product_id,
+    }).save();
 
-      const newPortfolio = await Portfolio.create({
-        worker_id,
-        product_id,
-      }).save();
-
-      return res.json(newPortfolio);
-   
+    return res.json(newPortfolio);
   } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
       message: "No se ha eliminado el portfolio",
-      // esto lo utilizamos para que nos salte el tipo de error
-      error: error, })
+      error: error,
+    });
   }
 };
 

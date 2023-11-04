@@ -6,7 +6,7 @@ const router = Router ()
 
 router.get ("/", getPortfolio)
 
-router.post ("/", createPortfolio)
+router.post ("/:id?", auth, createPortfolio)
 
 router.put ("/:id", updatePortfolioById)
 

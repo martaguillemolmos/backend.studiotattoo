@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Worker } from "./Worker";
 import { Appointment } from "./Appointment";
-
+import { IsEmail, IsString, MaxLength, MinLength, IsDate, IsBoolean, IsEnum, IsNumber, Max, Min} from "class-validator";
 
 const Roles = {
   user: 'user',
@@ -16,30 +16,47 @@ export class Users extends BaseEntity {
   id!: number
 
   @Column()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(3)
   name!: string
 
   @Column()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(3)
   surname!: string
 
   @Column()
+  @IsNumber()
+  @Max(999999999)
+  @Min(600000000)
   phone!: number
 
   @Column()
+  @IsEmail()
   email!: string
 
   @Column()
+  @IsString()
+  @MaxLength(12)
+  @MinLength(6)
   password!: string
 
-  @Column()
+  @Column({default: true})
+  @IsBoolean()
   is_active!: boolean
 
   @Column({type:"enum", enum: Roles})
+  @IsEnum(Roles)
   role!:string
 
   @Column()
+  @IsDate()
   created_at!: Date
 
   @Column()
+  @IsDate()
   update_at!: Date
 
   @ManyToMany ( () => Worker)

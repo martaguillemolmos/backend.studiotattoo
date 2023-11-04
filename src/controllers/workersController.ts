@@ -3,10 +3,10 @@ import { Worker } from "../models/Worker";
 import { Users } from "../models/User";
 import { error } from "console";
 
-//Crear un nuevo trabajador.
+// Super_Admin: Crear un nuevo trabajador.
 const createWorker = async (req: Request, res: Response) => {
   try {
-    const { user_id} = req.body;
+    const { user_id } = req.body;
 
     //Buscamos el usuario correspondiente de la tabla usuarios
     const user = await Users.findOneBy({ id: user_id });
@@ -24,8 +24,10 @@ const createWorker = async (req: Request, res: Response) => {
     await user.save();
 
     //Añadimos los siguientes campos con un mensaje por defecto:
-     const defaultFormation = "¡Bienvenido al equipo!, introduce aquí tu formación."
-     const defaultExperience = "¡Bienvenido al equipo!, introduce aquí tu experiencia."
+    const defaultFormation =
+      "¡Bienvenido al equipo!, introduce aquí tu formación.";
+    const defaultExperience =
+      "¡Bienvenido al equipo!, introduce aquí tu experiencia.";
 
     // Por último, creamos el nuevo trabajadr
     const newWorker = await Worker.create({
@@ -45,7 +47,7 @@ const createWorker = async (req: Request, res: Response) => {
   }
 };
 
-// El superAdmin pueda acceder a todos los trabajadores.
+// Super_Admin: Acceder a todos los trabajadores.
 const getAllWorkers = async (req: any, res: Response) => {
   //lógica para crear un nuevo trabajador.
   try {
@@ -66,20 +68,60 @@ const getAllWorkers = async (req: any, res: Response) => {
   }
 };
 
-
+// Super_Admin y Worker: Actualizar la información.
 const updateWorkerById = async (req: Request, res: Response) => {
   try {
-    //Lógica para actualizar usuarios por su Id
-    const workerId = req.params.id;
-    const { formation, experience } = req.body;
+    let worker;
+    if (
+      req.token.role == "super_admin" &&
+      req.token.is_active == true &&
+      req.params.id
+    ) {
+      console.log(req.params.id);
+      worker = await Worker.findOne({
+        where: { id: parseInt(req.params.id) },
+      });
+    } else if (req.token.role == "admin" && req.token.is_active == true) {
+      //Lógica para actualizar usuarios por su Id
+      worker = await Worker.findOne({
+        where: { user_id: req.token.id },
+      });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado" });
+    }
 
+    //Lógica para actualizar usuarios por su Id
+    const { formation, experience, is_active } = req.body;
+
+    //Comprobamos que el usuario exista
+    if (!worker) {
+      return res.status(403).json({ message: "Usuario no encontrado" });
+    }
+    // Declaramos el id, de esta forma, podemos indicar en el caso que sea super admin, el id del usuario que queremos modificar lo recuperaremos de la búsqueda o bien,
+    //en el caso que sea el propio usuario que quiera modificar sus datos, el id lo recuperamos del token.
+    let id;
+    // En caso del token del usuario nos proporciona el user_id del worker.
+
+    if (req.token.role === "super_admin" && req.params.id) {
+      id = parseInt(req.params.id);
+      await Worker.update(
+        { id: id },
+        {
+          formation,
+          experience,
+          is_active,
+        }
+      );
+      return res.json("Ha sido actualizado con éxito.");
+    } else {
+      await Worker.findOne({ where: { user_id: req.token.id } });
+    }
     await Worker.update(
-      {
-        id: parseInt(workerId),
-      },
+      { id: id || worker?.id },
       {
         formation,
         experience,
+        is_active,
       }
     );
     return res.json("Ha sido actualizado con éxito.");
@@ -93,6 +135,7 @@ const updateWorkerById = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 const deleteWorkerById = async (req: Request, res: Response) => {
   try {

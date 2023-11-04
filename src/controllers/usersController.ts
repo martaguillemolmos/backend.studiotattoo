@@ -3,58 +3,51 @@ import { Users } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validate } from "class-validator";
+import dayjs from "dayjs";
 
 // Crear nuevos usuarios
 const createUser = async (req: Request, res: Response) => {
-  //Lógica para crear usuarios
   try {
     // Recuperamos la información que nos envían desde el body
     const { name, surname, phone, email, password } = req.body;
 
-    //Comprobamos que los campos requeridos para la creación están completos.
-    if (
-      !name ||
-      !email ||
-      !password ||
-      name.trim() == "" ||
-      email.trim() == "" ||
-      password.trim() == ""
-    )
-      return res.send({
-        message: "Completa los campos obligatorios",
-      });
-    else {
-      // Debemos comprobar que sigue el nombre, email y contraseña cumple con los requisitos.
+    //Creamos un objeto para la validación 
+    const Uservalidate = new Users();
+    Uservalidate.name = name;
+    Uservalidate.surname = surname;
+    Uservalidate.phone = phone;
+    Uservalidate.email = email;
+    Uservalidate.password = password;
+    Uservalidate.is_active = true;
+    Uservalidate.role = "user";
+    Uservalidate.update_at = new Date(
+      dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    );
+    Uservalidate.created_at = new Date(
+      dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    );
 
-      // Tras recuperar la información, debemos encriptar la contraseña antes de guardarla.
-      const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
-      const Uservalidate = new Users();
-      Uservalidate.name = name;
-      Uservalidate.surname =surname;
-      Uservalidate.phone = phone;
-      Uservalidate.email = email;
-      Uservalidate.password = password
-
-      const errorValidate = await validate(Uservalidate);
-
-      if(errorValidate.length>0){
-        return res.status(404).json(errorValidate);
-      }
-      const newUser = await Users.create({
-        name: name.trim(),
-        surname: surname.trim(),
-        phone,
-        email: email.trim(),
-        password: encryptedPassword,
-      }).save();
-      return res.send(newUser);
+    //Evaluamos la validacion mediante class-validator validate
+    const errorValidate = await validate(Uservalidate);
+    if (errorValidate.length > 0) {
+      return res.status(404).json(errorValidate);
     }
+
+    //Debemos encriptar la contraseña antes de guardarla.
+    const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
+    const newUser = await Users.create({
+      name: name.trim(),
+      surname: surname.trim(),
+      phone,
+      email: email.trim(),
+      password: encryptedPassword,
+    }).save();
+    return res.send(newUser);
   } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
       message: "No se ha creado usuario",
-      // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }
@@ -83,8 +76,9 @@ const getAllUsers = async (req: Request, res: Response) => {
 //Login
 const loginUser = async (req: Request, res: Response) => {
   try {
-     // Recuperamos los datos guardados en body
-     const { email, password } = req.body;
+    // Recuperamos los datos guardados en body
+    const { email, password } = req.body;
+
     if (
       !req.body.email ||
       !req.body.password ||
@@ -99,7 +93,7 @@ const loginUser = async (req: Request, res: Response) => {
 
     // Validación de que el email sea @
     // Validación que el password contiene como mínimo y como máximo.
-   
+
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
       email: email.trim(),
@@ -114,7 +108,7 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(404).json("Usuario no activo.");
     }
     //Si el usuario si es correcto, compruebo la contraseña
-    console.log(user.password)
+    console.log(user.password);
     if (bcrypt.compareSync(password.trim(), user.password)) {
       //En caso de que hayamos verificado que el usuario es correcto y se corresponde a la contraseña que hemos indicado, generar token
       const token = jwt.sign(
@@ -134,7 +128,9 @@ const loginUser = async (req: Request, res: Response) => {
         token: token,
       });
     } else {
-      return res.status(403).json ({ message: "Usuario o contraseña incorrecta."})
+      return res
+        .status(403)
+        .json({ message: "Usuario o contraseña incorrecta." });
     }
   } catch (error) {
     return res.status(500).json(error);
@@ -174,7 +170,6 @@ const profileUser = async (req: any, res: Response) => {
 // Superadmin y usuario puede actualizar la información de usuario, dependiendo de la ruta.
 const updateUser = async (req: Request, res: Response) => {
   try {
-    
     let user;
     if (
       req.token.role == "super_admin" &&
@@ -254,8 +249,8 @@ const updatePassword = async (req: Request, res: Response) => {
 
     // Campos que nos pueden enviar a través del body para ser modificados.
     const { password, passwordOld } = req.body;
-    if (password.trim() == ""){
-      return res.json ("Debes añadir un campo.")
+    if (password.trim() == "") {
+      return res.json("Debes añadir un campo.");
     }
 
     //Comprobamos que el usuario exista
@@ -263,9 +258,7 @@ const updatePassword = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Usuario no encontrado" });
     }
 
-
     if (passwordOld !== password) {
-
       if (bcrypt.compareSync(passwordOld, user.password)) {
         console.log("aqui entra");
         const encryptedPassword = bcrypt.hashSync(password, 10);
@@ -277,7 +270,7 @@ const updatePassword = async (req: Request, res: Response) => {
             password: encryptedPassword,
           }
         );
-        return res.status(202).json("Contraseña modificada")
+        return res.status(202).json("Contraseña modificada");
       } else {
         return res.status(401).json({
           message: "La contraseña no coincide, vuelva a intentarlo.",
@@ -307,15 +300,16 @@ const deleteUserById = async (req: Request, res: Response) => {
     const userToRemove = await Users.findOneBy({
       id: parseInt(userIdToDelete),
     });
-    if (userToRemove?.role !== "super_admin"){
+    if (userToRemove?.role !== "super_admin") {
       const userRemoved = await Users.remove(userToRemove as Users);
       if (userRemoved) {
         return res.json("Se ha eliminado el usuario correctamente");
       }
     } else {
-      return res.json ("No se puede eliminar el usuario, porque es super_admin.")
+      return res.json(
+        "No se puede eliminar el usuario, porque es super_admin."
+      );
     }
-    
   } catch (error) {
     console.log(error);
     return res.json({

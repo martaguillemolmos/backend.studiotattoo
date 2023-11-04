@@ -11,8 +11,8 @@ router.post ("/", auth, isSuperAdmin, createWorker)
 //Super_Admin: Recuperar información de todos los trabajadores
 router.get ("/", auth, isSuperAdmin, getAllWorkers)
 
-//Actualizar un usuario por el Id
-router.put ("/:id", updateWorkerById)
+//Worker y Super_Admin: Actualizar un trabajador 
+router.put ("/:id?",auth, updateWorkerById)
 
 //Eliminar un usuario por el Id
 router.delete ("/:id", deleteWorkerById)

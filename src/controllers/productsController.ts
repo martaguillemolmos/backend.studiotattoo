@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { Product } from "../models/Product";
 
-const getProduct = async(req: Request, res:Response) => {
+//Esta ruta nos permite 
+const getAllProducts = async(req: Request, res:Response) => {
     //Lógica para recuperar la infor de todos nuestros productos
    try {
     const products = await Product.find ();
@@ -99,4 +100,4 @@ const deleteProductById = async(req: Request, res:Response) => {
     }
 }
 
-export {getProduct, createProduct, updateProductById, deleteProductById}
+export {getAllProducts, createProduct, updateProductById, deleteProductById}

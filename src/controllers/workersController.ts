@@ -149,7 +149,7 @@ const deleteWorkerById = async (req: Request, res: Response) => {
     const workerToRemove = await Worker.findOneBy({
       id: parseInt(workerIdToDelete),
     });
-    console.log("este es el workerToRemove", workerToRemove);
+    
       const workerRemoved = await Worker.remove(workerToRemove as Worker);
       if (workerRemoved) {
         return res.json("Se ha eliminado el usuario correctamente");

@@ -107,13 +107,18 @@ const updateProductById = async (req: Request, res: Response) => {
   }
 };
 
+// Super_admin: Eliminar un producto.
 const deleteProductById = async (req: Request, res: Response) => {
   try {
-    //Lógica para eliminar producto por el Id
-    const productIdToDelete = req.params.id;
+    //Lógica para eliminar producto por el Id a través del body.
+    const productIdToDelete = req.body.id;
     const productToRemove = await Product.findOneBy({
       id: parseInt(productIdToDelete),
     });
+
+    if(!productToRemove){
+      return res.json ("El producto no existe")
+    }
 
     const productRemoved = await Product.remove(productToRemove as Product);
     if (productRemoved) {

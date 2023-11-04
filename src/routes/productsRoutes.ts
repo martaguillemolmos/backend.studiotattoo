@@ -10,7 +10,7 @@ router.get ("/", getAllProducts)
 router.post("/", auth, createProduct);
 
 //Actualizar un producto 
-router.put("/:id", updateProductById);
+router.put("/", auth, updateProductById);
 
 //Eliminar un producto por el Id
 router.delete("/:id", deleteProductById);

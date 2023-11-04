@@ -300,6 +300,10 @@ const deleteUserById = async (req: Request, res: Response) => {
     const userToRemove = await Users.findOneBy({
       id: parseInt(userIdToDelete),
     });
+
+    if (!userToRemove){
+      return res.json ("El usuario que se quiere eliminar no existe.")
+    }
     if (userToRemove?.role !== "super_admin") {
       const userRemoved = await Users.remove(userToRemove as Users);
       if (userRemoved) {

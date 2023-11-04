@@ -150,6 +150,9 @@ const deleteWorkerById = async (req: Request, res: Response) => {
       id: parseInt(workerIdToDelete),
     });
     
+    if (!workerToRemove){
+      return res.json ("El trabajador que quieres eliminar no existe.")
+    }
       const workerRemoved = await Worker.remove(workerToRemove as Worker);
       if (workerRemoved) {
         return res.json("Se ha eliminado el usuario correctamente");

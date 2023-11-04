@@ -81,7 +81,10 @@ const deleteAppointment = async (req: Request, res: Response) => {
             id: parseInt(appointmentIdToDelete),
           }
           )
-      
+          
+          if (!appointmentToRemove){
+            return res.json("La cita que quieres eliminar no exste.")
+          }
           const appointmentRemoved = await Appointment.remove(appointmentToRemove as Appointment);
           if (appointmentRemoved) {
             return res.json("Se ha eliminado la cita correctamente");

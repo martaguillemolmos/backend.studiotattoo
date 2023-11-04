@@ -149,13 +149,17 @@ const deleteWorkerById = async (req: Request, res: Response) => {
     const workerToRemove = await Worker.findOneBy({
       id: parseInt(workerIdToDelete),
     });
-    
+
     if (!workerToRemove){
       return res.json ("El trabajador que quieres eliminar no existe.")
     }
       const workerRemoved = await Worker.remove(workerToRemove as Worker);
       if (workerRemoved) {
-        return res.json("Se ha eliminado el usuario correctamente");
+        let user = await Users.findOneBy({id : workerToRemove.user_id});
+        if (user?.role == "admin"){
+          await Users.update({ id : user.id },{ role: "user"});
+          return res.json("Se ha eliminado el usuario correctamente y se ha modificado el Rol.");
+        } return res.json ("No se ha modificado el role del usuario, comprueba la BD.")
       } else {
       return res.json(
         "No se puede eliminar el usuario, porque es super_admin."

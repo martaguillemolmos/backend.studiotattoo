@@ -16,22 +16,19 @@ export class Appointment extends BaseEntity {
     id!: number;
   
     @Column()
-    user_id!: number;
+    client!: number;
 
     @Column()
-    worker_id!: number;
+    artist!: number;
   
     @Column()
     portfolio_id!: number;
 
     @Column()
-    portfolio_price!: number;
+    day!: string;
 
     @Column()
-    day!: Date;
-
-    @Column()
-    hour!: Date;
+    hour!: string;
 
     @Column({type:"enum", enum: Status})
     status_appointment!: string;
@@ -43,16 +40,16 @@ export class Appointment extends BaseEntity {
     update_at!: Date;
 
     //Declaramos la relación que existe entre esta tabla y la tabla Portfolio.
-    @OneToMany (() => Portfolio, (portfolio) => portfolio.appointment)
-    portfolios! : Portfolio []
+    // @OneToMany (() => Portfolio, (portfolio) => portfolio.portfolioAppointment)
+    // portfolioAppointments! : Portfolio []
 
     //Declaramos la relación que existe entre esta tabla y Users.
-    @ManyToOne ( () => Users , (user) => user.appointments)
-    @JoinColumn ({ name: "user_id"})
-    user!: Users [];
+    @ManyToOne ( () => Users , (user) => user.userAppointments)
+    @JoinColumn ({ name: "client"})
+    userAppointment!: Users;
 
     //Declaramos la relación que existe entre esta tabla y Worker.
-     @ManyToOne ( () => Worker, (worker) => worker.appointments)
-     @JoinColumn ({ name: "worker_id"})
-     worker!: Worker [];
+     @ManyToOne ( () => Worker, (worker) => worker.workerAppointments)
+     @JoinColumn ({ name: "artist"})
+     workerAppointment!: Worker;
 }

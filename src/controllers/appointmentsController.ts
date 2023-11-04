@@ -1,21 +1,32 @@
 import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
+import { Users } from "../models/User";
 
 // Usuario: Crear una cita
 const createAppointment = async(req: Request, res: Response) => {
     try {
-        //Lógica para crear una nueva cita
-        const {worker_id, portfolio_id, day, hour, is_active } = req.body
+      if (req.token.role == "user" && req.token.is_active == true) {
+        //Recuperar el id del usuario por su token
+        const user = await Users.findOne({
+          where: { id: req.token.id },
+        });
+       
+        if(!user){
+          return res.json("El usuario no existe.")
+        }
+      
+        const {artist, portfolio_id, day, hour} = req.body
         const newAppointment = await Appointment.create({
-            worker_id,
+            client : user.id,
+            artist,
             portfolio_id,
             day,
             hour,
-            is_active
         }).save()
         return res.json (newAppointment)
     
-        } catch (error) {
+        } }
+        catch (error) {
         console.log(error);
         return res.json({
           succes: false,
@@ -47,18 +58,18 @@ const updateAppointment = async(req: Request, res: Response) => {
     try {
         //Lógica para actualizar portfolio
             const appointmentId = req.params.id
-            const {worker_id, portfolio_id, day, hour, is_active } = req.body
+            const {artist, portfolio_id, day, hour, status_appointment } = req.body
         
             await Appointment.update(
                 {
                     id: parseInt(appointmentId),
                   },
                   {
-                    worker_id,
+                    artist,
                     portfolio_id,
                     day,
                     hour,
-                    is_active
+                    status_appointment
                   }
             )
           

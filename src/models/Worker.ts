@@ -34,6 +34,10 @@ export class Worker extends BaseEntity {
   @JoinColumn({ name: "user_id" })
   users!: Users;
 
+  //Declaramos la relación que existe entre Worker y la tabla intermedia, Portfolio
+  @OneToMany ( () => Portfolio, (portfolio) => portfolio.portfolioWorker)
+  portfolioWorkers! : Portfolio [];
+
   //Declaramos la relación muchos a muchos que existe con la tabla Product.
   @ManyToMany ( () => Product)
   @JoinTable ({
@@ -49,26 +53,23 @@ export class Worker extends BaseEntity {
   })
   workerProduct!:Product []
 
+  //Declaramos la relación que existe entre Worker y la tabla intermedia, Appoiment
+ @OneToMany ( () => Appointment, (appointment) => appointment.workerAppointment)
+ workerAppointments! : Appointment [];
+
   //Declaramos la relación muchos a muchos que existe con la tabla Users.
   @ManyToMany ( () => Users)
   @JoinTable ({
     name:"appointment",
     joinColumn:{
-        name:"worker_id",
+        name:"artist",
         referencedColumnName: "id",
     },
     inverseJoinColumn: {
-        name:"user_id",
+        name:"client",
         referencedColumnName:"id",
     }
   })
   workerUsers!:Users []
 
-  //Declaramos la relación que existe entre Worker y la tabla intermedia, Appoiment
- @OneToMany ( () => Appointment, (appointment) => appointment.worker)
- appointments! : Appointment [];
-
-  //Declaramos la relación que existe entre Worker y la tabla intermedia, Portfolio
-   @OneToMany ( () => Portfolio, (portfolio) => portfolio.worker)
-   portfolios! : Portfolio [];
 }

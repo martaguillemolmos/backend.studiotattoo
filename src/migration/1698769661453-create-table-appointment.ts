@@ -14,11 +14,11 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
             generationStrategy: "increment",
           },
           {
-            name: "user_id",
+            name: "client",
             type: "int",
           },
           {
-            name: "worker_id",
+            name: "artist",
             type: "int",
           },
           {
@@ -27,11 +27,13 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
           },
           {
             name: "day",
-            type: "date",
+            type: "varchar",
+            length: "10",
           },
           {
             name: "hour",
-            type: "date",
+            type: "varchar",
+            length: "5",
           },
           {
             name: "status_appointment",
@@ -53,13 +55,13 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            columnNames: ["worker_id"],
+            columnNames: ["artist"],
             referencedTableName: "workers",
             referencedColumnNames: ["id"],
             onDelete: "CASCADE",
           },
           {
-            columnNames: ["user_id"],
+            columnNames: ["client"],
             referencedTableName: "users",
             referencedColumnNames: ["id"],
             onDelete: "CASCADE",

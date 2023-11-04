@@ -3,7 +3,7 @@ import { Appointment } from "./Appointment";
 import { Worker } from "./Worker";
 import { Product } from "./Product";
 
-@Entity("porfolios")
+@Entity("portfolios")
 export class Portfolio extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -21,18 +21,18 @@ export class Portfolio extends BaseEntity {
   update_at!: Date;
 
   // Declaramos la relación que existe entre esta tabla y la tabla Appointment.
-  @ManyToOne ( () => Appointment, (appointment) => appointment.portfolios)
-  @JoinColumn ({name: "portfolio_id"})
-  appointment!: Appointment []
+  // @ManyToOne ( () => Appointment, (appointment) => appointment.portfolioAppointments)
+  // @JoinColumn ({name: "portfolio_id"})
+  // portfolioAppointment!: Appointment;
 
   //Declaramos la relación que existe entre esta tabla y Workers.
-  @ManyToOne ( () => Worker , (worker) => worker.portfolios)
+  @ManyToOne ( () => Worker , (worker) => worker.workerAppointments)
   @JoinColumn ({ name: "worker_id"})
-  worker!: Worker [];
+  workerAppointment!: Worker;
 
   //Declaramos la relación que existe entre esta tabla y Product.
-  @ManyToOne ( () => Product , (product) => product.portfolios)
+  @ManyToOne ( () => Product , (product) => product.portfolioWorkers)
   @JoinColumn ({ name: "product_id"})
-  product!: Product [];
+  portfolioWorker!: Product;
   
 }

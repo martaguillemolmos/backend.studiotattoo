@@ -63,11 +63,11 @@ export class Users extends BaseEntity {
   @JoinTable ({
     name:"appointment",
     joinColumn:{
-        name:"user_id",
+        name:"client",
         referencedColumnName: "id",
     },
     inverseJoinColumn: {
-        name:"worker_id",
+        name:"artist",
         referencedColumnName:"id",
     }
   })
@@ -75,7 +75,7 @@ export class Users extends BaseEntity {
  userWorkers!:Worker [];
 
  //Declaramos la relación que existe entre User y la tabla intermedia, Appoiment
- @OneToMany ( () => Appointment, (appointment) => appointment.user)
- appointments! : Appointment [];
+ @OneToMany ( () => Appointment, (appointment) => appointment.userAppointment)
+ userAppointments! : Appointment [];
 }
 

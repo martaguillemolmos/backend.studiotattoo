@@ -30,6 +30,12 @@ export class CreateTableProduct1698678287968 implements MigrationInterface {
             length: "6",
           },
           {
+            name: "duration",
+            type: "int",
+            length: "6",
+            default: "1",
+          },
+          {
             name: "description",
             type: "varchar",
             length: "50",

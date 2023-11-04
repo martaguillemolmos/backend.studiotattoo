@@ -29,13 +29,14 @@ const createProduct = async (req: Request, res: Response) => {
       (req.token.role == "admin" && req.token.is_active == true)
     ) {
       // Recuperamos la información que nos envían desde el body
-      const { type, product, price, description, image } = req.body;
+      const { type, product, price, description, duration, image } = req.body;
 
       // Consultamos en la base de datos para verificar si este producto ya existe.
       const verifyProduct = await Product.findOneBy({
         type,
         product,
         price,
+        duration,
         description,
       });
       console.log(verifyProduct);

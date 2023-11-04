@@ -30,6 +30,9 @@ export class Product extends BaseEntity {
   price!: number;
 
   @Column()
+  duration!: number;
+
+  @Column()
   description!: string;
 
   @Column()
@@ -41,6 +44,9 @@ export class Product extends BaseEntity {
   @Column()
   update_at!: Date;
 
+//Declaramos la relación que existe entre Product y la tabla intermedia, Portfolio
+@OneToMany(() => Portfolio, (portfolio) => portfolio.portfolioWorker)
+portfolioWorkers!: Portfolio[];
 
   //Declaramos la relación muchos a muchos que existe con la tabla Worker.
   @ManyToMany(() => Worker)
@@ -56,8 +62,4 @@ export class Product extends BaseEntity {
     },
   })
   productWorkers!: Worker[];
-
-  //Declaramos la relación que existe entre Product y la tabla intermedia, Portfolio
-  @OneToMany(() => Portfolio, (portfolio) => portfolio.worker)
-  portfolios!: Portfolio[];
 }

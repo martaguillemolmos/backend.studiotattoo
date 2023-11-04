@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../models/Product";
+import { type } from "os";
 
 //Recuperar todos los productos.
 const getAllProducts = async(req: Request, res:Response) => {
@@ -22,23 +23,29 @@ const getAllProducts = async(req: Request, res:Response) => {
 const createProduct = async(req: Request, res:Response) => {
     //lógica para crear un nuevo producto
     try {
+      // Tan sólo permitimos que si el token pertenece a un super-admin o bien a un admin y está activo, puede crear el nuevo producto.
       if ( (req.token.role == "super_admin" && req.token.is_active == true ) || (req.token.role == "admin" && req.token.is_active == true)) {
-        // Recuperamos la información que nos envían desde el body
-       const { type, product, price, description, image } = req.body; 
-       const newProduct = await Product.create({
-           type,
-           product,
-           price,
-           description,
-           image
-         }).save();
-         return res.send(newProduct);
+      // Recuperamos la información que nos envían desde el body
+       const { type, product, price, description, image } = req.body;
 
-      } else {
-        return res.status(403).json({ message: "Usuario no autorizado" });
+      // Consultamos en la base de datos para verificar si este producto ya existe.
+      const verifyProduct = await Product.findOneBy ({type , product, price, description})
+        console.log(verifyProduct)
+      if (verifyProduct){
+        return res.json ("Este producto ya existe.")
       }
-
-       
+      
+      // En el caso que no exista, creamos el nuevo producto.
+       const newProduct = await Product.create({
+        type,
+        product,
+        price,
+        description,
+        image
+      }).save();
+      return res.json (newProduct);
+      } 
+        return res.status(403).json({ message: "Usuario no autorizado" });
 
      } catch (error) {
        console.log(error);
@@ -50,7 +57,6 @@ const createProduct = async(req: Request, res:Response) => {
        });
      }
 }
-
 
 const updateProductById = async(req: Request, res:Response) => {
     try {

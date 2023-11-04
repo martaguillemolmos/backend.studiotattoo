@@ -5,7 +5,7 @@ const router = Router ()
 //Traer todos los productos
 router.get ("/", getAllProducts)
 
-//Crear un producto
+//Super_admin y trabajador : Crear un producto
 router.post("/", createProduct);
 
 //Actualizar un producto 

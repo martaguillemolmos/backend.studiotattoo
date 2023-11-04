@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Product } from "../models/Product";
 
-//Esta ruta nos permite 
+//Recuperar todos los productos.
 const getAllProducts = async(req: Request, res:Response) => {
     //Lógica para recuperar la infor de todos nuestros productos
    try {
@@ -18,12 +18,13 @@ const getAllProducts = async(req: Request, res:Response) => {
    }
 }
 
+//Super_admin y admin : Crear un nuevo producto.
 const createProduct = async(req: Request, res:Response) => {
     //lógica para crear un nuevo producto
     try {
-       // Recuperamos la información que nos envían desde el body
-       const { type, product, price, description, image } = req.body;
-    
+      if ( (req.token.role == "super_admin" && req.token.is_active == true ) || (req.token.role == "admin" && req.token.is_active == true)) {
+        // Recuperamos la información que nos envían desde el body
+       const { type, product, price, description, image } = req.body; 
        const newProduct = await Product.create({
            type,
            product,
@@ -32,6 +33,12 @@ const createProduct = async(req: Request, res:Response) => {
            image
          }).save();
          return res.send(newProduct);
+
+      } else {
+        return res.status(403).json({ message: "Usuario no autorizado" });
+      }
+
+       
 
      } catch (error) {
        console.log(error);

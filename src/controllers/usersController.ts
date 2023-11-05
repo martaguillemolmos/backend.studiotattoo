@@ -203,14 +203,11 @@ const updateUser = async (req: Request, res: Response) => {
     // Indicamos los datos que se pueden actualizar a través de esta ruta.
     const { name, surname, phone, email, is_active } = req.body;
     
-    // Validamos el formato de los nuevos datos.
-    // Validación de que el email sea @
+    // Validar el formato de los nuevos datos.
     const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (email !== undefined && email.trim() !=="" && !emailRegex.test(email) && (email.length == 0 || email.length > 50) ){
       return res.json("Formato de email incorrecto. Recuerda: Número máx. de caracteres 50.")
     }
-
-    // Validación del máximo.
     if(name !== undefined && name.trim() !=="" && name.length >50) {
       return res.json ("User: Número máx. de caracteres 50.")
     }
@@ -220,9 +217,7 @@ const updateUser = async (req: Request, res: Response) => {
     if(phone !== undefined && (phone >999999999 || phone < 600000000 || phone.length > 14)){
       return res.json ("Introduce un número de 9 caracteres, puede empezar desde el 6.")
     }
-    if(is_active !== undefined && !is_active == true || false){
-      return res.json ("Is_active: Tan sólo permite true o false.")
-    }
+   
     //Comprobamos que el usuario exista
     if (!user) {
       return res.status(403).json({ message: "Usuario no encontrado" });

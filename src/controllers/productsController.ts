@@ -30,7 +30,20 @@ const createProduct = async (req: Request, res: Response) => {
     ) {
       // Recuperamos la información que nos envían desde el body
       const { type, product, price, description, duration, image } = req.body;
-
+      // Validamos los datos
+     
+      if(product !== undefined && product.trim() !=="" && product.length >50) {
+        return res.json ("Product: Número máx. de caracteres 50.")
+      }
+      if(price !== undefined && product.trim() !=="" && product.length >6) {
+        return res.json ("Price: Número máx. de caracteres 6.")
+      }
+      if(description !== undefined && description.trim() !=="" && description.length >50) {
+        return res.json ("Description: Número máx. de caracteres 50.")
+      }
+        if(price !== undefined && product.trim() !=="" && product.length >6) {
+        return res.json ("Price: Número máx. de caracteres 6.")
+      }
       // Consultamos en la base de datos para verificar si este producto ya existe.
       const verifyProduct = await Product.findOneBy({
         type,

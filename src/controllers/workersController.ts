@@ -144,10 +144,7 @@ const updateWorkerById = async (req: Request, res: Response) => {
 //Super_Admin: Eliminar el trabajador.
 const deleteWorkerById = async (req: Request, res: Response) => {
   try {
-    if (req.token.role !== "super_admin") {
-      return res.json("El usuario no está autorizado");
-    }
-
+  
     // Recuperamos el valor del id a eliminar por el body.
     const workerIdToDelete = req.body.id;
     const workerToRemove = await Worker.findOneBy({

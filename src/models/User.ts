@@ -34,6 +34,7 @@ export class Users extends BaseEntity {
   phone!: number
 
   @Column()
+  @MaxLength (50)
   @IsEmail()
   email!: string
 

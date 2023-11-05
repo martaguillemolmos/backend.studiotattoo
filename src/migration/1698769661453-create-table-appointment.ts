@@ -42,6 +42,11 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
             default: '"pending"'
           },
           {
+            name: "is_active",
+            type: "boolean",
+            default: "true",
+          },
+          {
             name: "created_at",
             type: "timestamp",
             default: "CURRENT_TIMESTAMP",

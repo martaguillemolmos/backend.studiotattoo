@@ -32,6 +32,9 @@ export class Appointment extends BaseEntity {
 
     @Column({type:"enum", enum: Status})
     status_appointment!: string;
+
+    @Column()
+    is_active!: boolean;
   
     @Column()
     created_at!: Date;

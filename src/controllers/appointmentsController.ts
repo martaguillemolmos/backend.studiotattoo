@@ -86,6 +86,23 @@ const getAllAppointments = async (req: Request, res: Response) => {
 
 //Recuperar todas las citas activas según el id o bien, si eres superAdmin TODAS.
 // Crear nuevo endpoint
+const getAppointmentsActiveById = async (req: Request, res: Response) => {
+  try {
+    const appointments = await Appointment.find();
+    console.log( "Esto nos devuelve appointments", appointments)
+    if (appointments.length == 0) {
+      return res.json("Actualmente no existen portfolios.");
+    }
+    return res.json(appointments);
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha podido realizar la consulta",
+      error: error,
+    });
+  }
+};
 
 const updateAppointment = async (req: Request, res: Response) => {
   try {
@@ -150,4 +167,5 @@ export {
   getAllAppointments,
   updateAppointment,
   deleteAppointment,
+  getAppointmentsActiveById
 };

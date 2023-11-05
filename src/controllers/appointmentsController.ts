@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 
 // Usuario y admin: Crear una cita
 // Me gustaría modificar la forma de devolver la información cuando se crea la cita.
-// Me gustarís comprobar que la fecha que nos indica para solicitar la fecha, es después de el día que se solicita.
 const createAppointment = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
@@ -40,11 +39,12 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El portfolio no existe.");
       }
 
-      const dateBody = dayjs(date, "DD/MM/YYYY HH:mm");
-      const dateNow = dayjs ();
+      const dateBody = dayjs(date, "'{AAAA} MM-DDTHH:mm:ss SSS [Z] A'");
+      const dateNow = dayjs();
+    
 
-      if (!dateBody.isValid() || dateBody.isBefore(dateNow)) {
-        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es DD/MM/YYYY HH:mm ");
+      if (!dateBody.isValid() || dateBody < dateNow) {
+        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' ");
       }
 
       if (!dateBody) {
@@ -89,7 +89,9 @@ const createAppointment = async (req: Request, res: Response) => {
 //-- Me gustaría optimizar: cuando nos devuelve los resultados, que nos devuelva información del usuario y los datos organizados.
 const getAllAppointments = async (req: Request, res: Response) => {
   try {
-    const appointments = await Appointment.find();
+    const appointments = await Appointment.find({
+      relations : [ "portfolio", "userAppointment", "workerAppointment"],
+    });
     if (appointments.length == 0) {
       return res.json("Actualmente no existen portfolios.");
     }
@@ -120,6 +122,7 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
 
       const appointments = await Appointment.find({
         where: { client: user.id },
+        relations : [ "portfolio", "userAppointment", "workerAppointment"],
       });
 
       if (appointments.length === 0) {
@@ -165,6 +168,7 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
 
       const appointments = await Appointment.find({
         where: { artist: worker.id },
+        relations : [ "portfolio", "userAppointment", "workerAppointment"],
       });
 
       if (appointments.length === 0) {
@@ -186,7 +190,6 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
 };
 
 //Usuario: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
-//-- Me gustaría optimizar: cuando nos devuelve los resultados
 const updateAppointmentUser = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
@@ -219,6 +222,18 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
         return res.json("El portfolio no existe.");
       }
 
+      const dateBody = dayjs(date, "'{AAAA} MM-DDTHH:mm:ss SSS [Z] A'");
+      const dateNow = dayjs();
+    
+
+      if (!dateBody.isValid() || dateBody < dateNow) {
+        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' ");
+      }
+
+      if (!dateBody) {
+        return res.json("La fecha y hora no puede ser nula.");
+      }
+
       if (user.id == worker.user_id) {
         return res.json(
           "Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo."
@@ -243,7 +258,7 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
           client: user.id,
           portfolio_id,
           artist: worker_id,
-          date,
+          date: dateBody.toDate(),
           status_appointment,
           is_active,
         }
@@ -263,7 +278,6 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
 };
 
 //Worker: Actualizar el estado de una cita.
-//-- Me gustaría optimizar: cuando nos devuelve los resultados
 const updateAppointmentWorker = async (req: Request, res: Response) => {
   try {
     if (req.token.role == "admin" && req.token.is_active == true) {

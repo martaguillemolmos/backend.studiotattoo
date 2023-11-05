@@ -278,7 +278,7 @@ const updatePassword = async (req: Request, res: Response) => {
 
     // Campos que nos pueden enviar a través del body para ser modificados.
     const { password, passwordOld } = req.body;
-    if (password.trim() == "") {
+    if (password.trim() == "" || passwordOld.trim () == "") {
       return res.json("Debes añadir un campo.");
     }
     // Validación que el password contiene como mínimo y como máximo.

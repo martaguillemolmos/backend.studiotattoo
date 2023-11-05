@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Portfolio } from "../models/Portfolio";
 import { Worker } from "../models/Worker";
+import { Product } from "../models/Product";
 
 // Recuperar todos los portfolios
 //-- Me gustaría optimizar: cuando nos devuelve los resultados, que nos devuelva información del usuario y los datos organizados.
@@ -61,6 +62,14 @@ const createPortfolio = async (req: Request, res: Response) => {
       return res.json("El trabajador ya tiene un portfolio con este producto.");
     }
     
+    const product = await Product.findOne({
+      where: { id: product_id },
+    });
+
+    if (!product) {
+      return res.json("El producto no existe.");
+    }
+
     const newPortfolio = await Portfolio.create({
       worker_id: worker?.id,
       product_id,
@@ -70,7 +79,7 @@ const createPortfolio = async (req: Request, res: Response) => {
     console.log(error);
     return res.json({
       succes: false,
-      message: "No se ha eliminado el portfolio",
+      message: "No se ha creado el portfolio",
       error: error,
     });
   }

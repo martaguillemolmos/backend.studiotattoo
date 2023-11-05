@@ -144,13 +144,17 @@ const updatePortfolioById = async (req: Request, res: Response) => {
   }
 };
 
+//Super_admin: Eliminar un portfolio
 const deletePortfolioById = async (req: Request, res: Response) => {
   try {
-    const portfolioIdToDelete = req.params.id;
+    const portfolioIdToDelete = req.body.id;
     const portfolioToRemove = await Portfolio.findOneBy({
       id: parseInt(portfolioIdToDelete),
     });
 
+    if(!portfolioToRemove){
+      return res.json ("El portfolio que quieres eliminar no existe.")
+    }
     const portfolioRemoved = await Portfolio.remove(
       portfolioToRemove as Portfolio
     );

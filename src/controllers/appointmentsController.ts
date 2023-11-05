@@ -94,7 +94,7 @@ const getAllAppointments = async (req: Request, res: Response) => {
   }
 };
 
-//Recuperar todas las citas activas según el id como usuario.
+//Recuperar todas las citas según el id como usuario.
 const getAppointmentsByUserId = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "user", "admin" && req.token.is_active == true)) {

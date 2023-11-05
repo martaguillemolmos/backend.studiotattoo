@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAppointment, deleteAppointment, getAllAppointments, getAppointmentsByUserId, getAppointmentsByWorkerId, updateAppointment } from "../controllers/appointmentsController";
+import { createAppointment, deleteAppointment, getAllAppointments, getAppointmentsByUserId, getAppointmentsByWorkerId,  updateAppointmentUser } from "../controllers/appointmentsController";
 import { auth } from "../middelware/auth";
 import { isSuperAdmin } from "../middelware/isSuperAdmin";
 
@@ -17,8 +17,8 @@ router.get('/user', auth, getAppointmentsByUserId)
 //Admin: Recuperar todas las citas del trabajador.
 router.get('/worker', auth, getAppointmentsByWorkerId)
 
-
-router.put ('/', updateAppointment)
+//Usuario: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
+router.put ('/user', auth, updateAppointmentUser)
 
 //Super_Admin: Eliminar citas.
 router.delete ('/',auth, isSuperAdmin, deleteAppointment)

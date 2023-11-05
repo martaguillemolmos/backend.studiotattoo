@@ -39,7 +39,6 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El portfolio no existe.");
       }
 
-      
       if (user.id == worker.user_id) {
         return res.json(
           "Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo."
@@ -134,7 +133,7 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
 //-- Me gustaría optimizar: cuando nos devuelve los resultados
 const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "admin" && req.token.is_active == true)) {
+    if (req.token.role == "admin" && req.token.is_active == true) {
       //Recuperar el id del usuario por su token
       const user = await Users.findOne({
         where: { id: req.token.id },
@@ -144,9 +143,9 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-     console.log("esto es user", user)
+      console.log("esto es user", user);
       const worker = await Worker.findOne({
-        where: {user_id : user.id}
+        where: { user_id: user.id },
       });
 
       if (!worker) {
@@ -156,7 +155,6 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
       const appointments = await Appointment.find({
         where: { artist: worker.id },
       });
-    
 
       if (appointments.length === 0) {
         return res.json("Actualmente no existen citas para este usuario.");
@@ -176,26 +174,73 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
   }
 };
 
-const updateAppointment = async (req: Request, res: Response) => {
+//Usuario: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
+//-- Me gustaría optimizar: cuando nos devuelve los resultados
+const updateAppointmentUser = async (req: Request, res: Response) => {
   try {
-    //Lógica para actualizar portfolio
-    const appointmentId = req.params.id;
-    const { artist, portfolio_id, day, hour, status_appointment } = req.body;
+    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+      });
 
-    await Appointment.update(
-      {
-        id: parseInt(appointmentId),
-      },
-      {
-        artist,
-        portfolio_id,
-        day,
-        hour,
-        status_appointment,
+      if (!user) {
+        return res.json("El usuario no existe.");
       }
-    );
 
-    return res.json("La cita ha sido actualizada con éxito");
+      const { appointmentId, portfolio_id, day, hour, is_active } = req.body;
+
+      const existPortfolio = await Portfolio.findOne({
+        where: { id: portfolio_id },
+      });
+
+      const worker_id = existPortfolio?.worker_id;
+
+      const worker = await Worker.findOne({
+        where: { id: worker_id },
+      });
+
+      if (!worker) {
+        return res.json("El trabajador no existe.");
+      }
+
+      if (!existPortfolio) {
+        return res.json("El portfolio no existe.");
+      }
+
+      if (user.id == worker.user_id) {
+        return res.json(
+          "Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo."
+        );
+      }
+
+      const existAppointment = await Appointment.findOne({
+        where: { artist: worker_id, day, hour },
+      });
+
+      if (existAppointment) {
+        return res.json("Cita no disponible: Introduce otra fecha y hora.");
+      }
+
+      const status_appointment = "pending";
+
+      await Appointment.update(
+        {
+          id: parseInt(appointmentId),
+        },
+        {
+          client: user.id,
+          portfolio_id,
+          artist: worker_id,
+          day,
+          hour,
+          status_appointment,
+          is_active,
+        }
+      );
+
+      return res.json("La cita ha sido actualizada con éxito");
+    }
   } catch (error) {
     console.log(error);
     return res.json({
@@ -206,6 +251,8 @@ const updateAppointment = async (req: Request, res: Response) => {
     });
   }
 };
+
+
 
 //Super_Admin: Eliminar citas.
 const deleteAppointment = async (req: Request, res: Response) => {
@@ -238,7 +285,7 @@ const deleteAppointment = async (req: Request, res: Response) => {
 export {
   createAppointment,
   getAllAppointments,
-  updateAppointment,
+  updateAppointmentUser,
   deleteAppointment,
   getAppointmentsByUserId,
   getAppointmentsByWorkerId,

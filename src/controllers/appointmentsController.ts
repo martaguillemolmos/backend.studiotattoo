@@ -41,9 +41,10 @@ const createAppointment = async (req: Request, res: Response) => {
       }
 
       const dateBody = dayjs(date, "DD/MM/YYYY HH:mm");
+      const dateNow = dayjs ();
 
-      if (!dateBody.isValid()) {
-        return res.json("El formato de la fecha no es válido. Es DD/MM/YYYY HH:mm ");
+      if (!dateBody.isValid() || dateBody.isBefore(dateNow)) {
+        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es DD/MM/YYYY HH:mm ");
       }
 
       if (!dateBody) {

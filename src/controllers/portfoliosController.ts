@@ -113,17 +113,19 @@ const updatePortfolioById = async (req: Request, res: Response) => {
         }
       );
       return res.json("Ha sido actualizado con éxito.");
+
     } else {
       await Worker.findOne({ where: { user_id: req.token.id } });
     }
 
     const portfolioWorker = await Portfolio.findOne({
-      where: { worker_id: worker?.id, product_id },
+      where: { worker_id: worker?.id, id:portfolio_id },
     });
-
+    console.log("este es el worker.id",worker?.id)
     if(!portfolioWorker){
       return res.json ("No puedes actualizar un portfolio de otro usuario.")
     }
+
       await Portfolio.update(
       { id: portfolio_id },
       {
@@ -131,7 +133,7 @@ const updatePortfolioById = async (req: Request, res: Response) => {
         is_active,
       }
     );
-    return res.json("Ha sido actualizado con éxito.");
+    return res.json("Ha sido actualizado con éxito, admin.");
   } catch (error) {
     console.log(error);
     return res.json({

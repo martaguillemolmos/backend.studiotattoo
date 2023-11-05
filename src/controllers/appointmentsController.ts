@@ -94,7 +94,7 @@ const getAllAppointments = async (req: Request, res: Response) => {
   }
 };
 
-//Recuperar todas las citas según el id como usuario.
+//Recuperar todas las citas del cliente.
 const getAppointmentsByUserId = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
@@ -129,7 +129,50 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
   }
 };
 
-//Recuperar todas las citas activas según el id como trabajador.
+//Recuperar todas las citas del trabajador.
+const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
+  try {
+    if ((req.token.role == "admin" && req.token.is_active == true)) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+      });
+
+      if (!user) {
+        return res.json("El usuario no existe.");
+      }
+
+     console.log("esto es user", user)
+      const worker = await Worker.findOne({
+        where: {user_id : user.id}
+      });
+
+      if (!worker) {
+        return res.json("Este usuario no es un trabajador.");
+      }
+
+      const appointments = await Appointment.find({
+        where: { artist: worker.id },
+      });
+    
+
+      if (appointments.length === 0) {
+        return res.json("Actualmente no existen citas para este usuario.");
+      }
+
+      return res.json(appointments);
+    } else {
+      return res.json("Usuario no autorizado.");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha podido realizar la consulta",
+      error: error,
+    });
+  }
+};
 
 const updateAppointment = async (req: Request, res: Response) => {
   try {
@@ -195,4 +238,5 @@ export {
   updateAppointment,
   deleteAppointment,
   getAppointmentsByUserId,
+  getAppointmentsByWorkerId,
 };

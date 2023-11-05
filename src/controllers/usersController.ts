@@ -204,7 +204,6 @@ const updateUser = async (req: Request, res: Response) => {
     const { name, surname, phone, email, is_active } = req.body;
     
     // Validamos el formato de los nuevos datos.
-
     // Validación de que el email sea @
     const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (email !== undefined && email.trim() !=="" && !emailRegex.test(email) && (email.length == 0 || email.length > 50) ){

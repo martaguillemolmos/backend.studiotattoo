@@ -96,7 +96,17 @@ const updateWorkerById = async (req: Request, res: Response) => {
 
     //Lógica para actualizar usuarios por su Id
     const { formation, experience, is_active } = req.body;
-
+    // Validar el formato de los nuevos datos.
+    if(formation !== undefined && formation.trim() !=="" && formation.length >200) {
+      return res.json ("Formation: Número máx. de caracteres 200.")
+    }
+    if(experience !== undefined && experience.trim() !=="" && experience.length >200) {
+      return res.json ("Experience: Número máx. de caracteres 200.")
+    }
+    if(is_active !== undefined && !is_active == true || false){
+      return res.json ("Is_active: Tan sólo permite true o false.")
+    }
+    
     //Comprobamos que el usuario exista
     if (!worker) {
       return res.status(403).json({ message: "El usuario no existe." });

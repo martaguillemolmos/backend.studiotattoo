@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Product } from "../models/Product";
-import { type } from "os";
 
 //Recuperar todos los productos.
 const getAllProducts = async (req: Request, res: Response) => {
@@ -20,6 +19,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 };
 
 //Super_admin y admin : Crear un nuevo producto.
+// Mejoras: Validar los números y tipo int.
 const createProduct = async (req: Request, res: Response) => {
   //lógica para crear un nuevo producto
   try {
@@ -34,15 +34,12 @@ const createProduct = async (req: Request, res: Response) => {
      
       if(product !== undefined && product.trim() !=="" && product.length >50) {
         return res.json ("Product: Número máx. de caracteres 50.")
-      }
-      if(price !== undefined && product.trim() !=="" && product.length >6) {
-        return res.json ("Price: Número máx. de caracteres 6.")
-      }
+      } 
       if(description !== undefined && description.trim() !=="" && description.length >50) {
         return res.json ("Description: Número máx. de caracteres 50.")
       }
-        if(price !== undefined && product.trim() !=="" && product.length >6) {
-        return res.json ("Price: Número máx. de caracteres 6.")
+      if(image !== undefined && image.trim() !=="" && image.length >50) {
+        return res.json ("Description: Número máx. de caracteres 50.")
       }
       // Consultamos en la base de datos para verificar si este producto ya existe.
       const verifyProduct = await Product.findOneBy({
@@ -80,6 +77,7 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 //Super_admin y admin: Modificar un producto.
+// Mejoras: Validar los números y tipo int.
 const updateProductById = async (req: Request, res: Response) => {
   try {
     // Limitamos la ruta a los super_admin y los admin
@@ -94,7 +92,15 @@ const updateProductById = async (req: Request, res: Response) => {
         return res.json ("El producto que quieres actualizar no existe.")
       }
       const { type, product, price, description, image } = req.body;
-
+      if(product !== undefined && product.trim() !=="" && product.length >50) {
+        return res.json ("Product: Número máx. de caracteres 50.")
+      } 
+      if(description !== undefined && description.trim() !=="" && description.length >50) {
+        return res.json ("Description: Número máx. de caracteres 50.")
+      }
+      if(image !== undefined && image.trim() !=="" && image.length >50) {
+        return res.json ("Description: Número máx. de caracteres 50.")
+      }
       await Product.update(
         {
           id: parseInt(productId),

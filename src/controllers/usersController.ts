@@ -214,7 +214,7 @@ const updateUser = async (req: Request, res: Response) => {
     if(surname !== undefined && surname.trim() !=="" && surname.length >50) {
       return res.json ("User: Número máx. de caracteres 50.")
     }
-    if(phone !== undefined && (phone >999999999 || phone < 600000000 || phone.length > 14)){
+    if(phone !== undefined && (phone >999999999 || phone < 600000000 )){
       return res.json ("Introduce un número de 9 caracteres, puede empezar desde el 6.")
     }
    
@@ -244,7 +244,7 @@ const updateUser = async (req: Request, res: Response) => {
       }
     );
 
-    return res.json(`El usuario de ${name},ha sido actualizado con éxito.`);
+    return res.json(`El usuario,ha sido actualizado con éxito.`);
   } catch (error) {
     console.log("error", error);
     return res.json({

@@ -122,7 +122,7 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
       }
 
       const appointments = await Appointment.find({
-        where: { client: user.id },
+        where: { client: user.id, is_active:true },
         relations: ["portfolio", "userAppointment", "workerAppointment"],
       });
 
@@ -158,7 +158,6 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-      console.log("esto es user", user);
       const worker = await Worker.findOne({
         where: { user_id: user.id },
       });
@@ -168,7 +167,7 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
       }
 
       const appointments = await Appointment.find({
-        where: { artist: worker.id },
+        where: { artist: worker.id , is_active: true},
         relations: ["portfolio", "userAppointment", "workerAppointment"],
       });
 
@@ -214,7 +213,7 @@ const getAppointmentsStatusByWorkerId = async (req: Request, res: Response) => {
       const { status } = req.params;
 
       const appointments = await Appointment.find({
-        where: { artist: worker.id, status_appointment: status },
+        where: { artist: worker.id, status_appointment: status, is_active:true },
         relations: ["portfolio", "userAppointment", "workerAppointment"],
       });
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
 import { Users } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
+import { Worker } from "../models/Worker";
 
 // Usuario y admin: Crear una cita
 // Me gustaría modificar la forma de devolver la información cuando se crea la cita.
@@ -26,11 +27,20 @@ const createAppointment = async (req: Request, res: Response) => {
 
       const worker_id = existPortfolio?.worker_id;
 
+      const worker = await Worker.findOne({
+        where: { id: worker_id },
+      });
+
+      if (!worker) {
+        return res.json("El trabajador no existe.");
+      }
+
       if (!existPortfolio) {
         return res.json("El portfolio no existe.");
       }
 
-      if (user.id == worker_id) {
+      
+      if (user.id == worker.user_id) {
         return res.json(
           "Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo."
         );
@@ -84,16 +94,31 @@ const getAllAppointments = async (req: Request, res: Response) => {
   }
 };
 
-//Recuperar todas las citas activas según el id o bien, si eres superAdmin TODAS.
-// Crear nuevo endpoint
-const getAppointmentsActiveById = async (req: Request, res: Response) => {
+//Recuperar todas las citas activas según el id como usuario.
+const getAppointmentsByUserId = async (req: Request, res: Response) => {
   try {
-    const appointments = await Appointment.find();
-    console.log( "Esto nos devuelve appointments", appointments)
-    if (appointments.length == 0) {
-      return res.json("Actualmente no existen portfolios.");
+    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+      });
+
+      if (!user) {
+        return res.json("El usuario no existe.");
+      }
+
+      const appointments = await Appointment.find({
+        where: { client: user.id },
+      });
+
+      if (appointments.length === 0) {
+        return res.json("Actualmente no existen citas para este usuario.");
+      }
+
+      return res.json(appointments);
+    } else {
+      return res.json("Usuario no autorizado.");
     }
-    return res.json(appointments);
   } catch (error) {
     console.log(error);
     return res.json({
@@ -103,6 +128,8 @@ const getAppointmentsActiveById = async (req: Request, res: Response) => {
     });
   }
 };
+
+//Recuperar todas las citas activas según el id como trabajador.
 
 const updateAppointment = async (req: Request, res: Response) => {
   try {
@@ -167,5 +194,5 @@ export {
   getAllAppointments,
   updateAppointment,
   deleteAppointment,
-  getAppointmentsActiveById
+  getAppointmentsByUserId,
 };

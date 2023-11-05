@@ -49,7 +49,6 @@ const createPortfolio = async (req: Request, res: Response) => {
       return res.json ("El usuario no existe.")
     }
 
-
     const { product_id } = req.body;
     
     const existPortfolio = await Portfolio.findOne({
@@ -78,27 +77,66 @@ const createPortfolio = async (req: Request, res: Response) => {
 //Superadmin y Admin: Actualizar un portfolio.
 const updatePortfolioById = async (req: Request, res: Response) => {
   try {
-    //Lógica para actualizar portfolio
-    const portfolioId = req.params.id;
-    const { worker_id, product_id } = req.body;
 
-    await Portfolio.update(
+    let worker;
+    if (
+      req.token.role == "super_admin" &&
+      req.token.is_active == true &&
+      req.params.id
+    ) {
+      console.log(req.params.id);
+      worker = await Worker.findOne({
+        where: { id: parseInt(req.params.id) },
+      });
+    } else if (
+      req.token.role !== "super_admin" &&
+      req.token.is_active === true
+    ) {
+      worker = await Worker.findOne({
+        where: { user_id: req.token.id },
+      });
+    } else {
+      return res.status(403).json({ message: "Usuario no autorizado" });
+    }
+  
+  const {portfolio_id, product_id, is_active} = req.body;
+   
+  let id;
+   
+    if (req.token.role === "super_admin" && req.params.id) {
+      id = parseInt(req.params.id);
+      await Portfolio.update(
+        { id: id },
+        {
+          product_id,
+          is_active,
+        }
+      );
+      return res.json("Ha sido actualizado con éxito.");
+    } else {
+      await Worker.findOne({ where: { user_id: req.token.id } });
+    }
+
+    const portfolioWorker = await Portfolio.findOne({
+      where: { worker_id: worker?.id, product_id },
+    });
+
+    if(!portfolioWorker){
+      return res.json ("No puedes actualizar un portfolio de otro usuario.")
+    }
+      await Portfolio.update(
+      { id: portfolio_id },
       {
-        id: parseInt(portfolioId),
-      },
-      {
-        worker_id,
         product_id,
+        is_active,
       }
     );
-
-    return res.json("Ha sido actualizado con éxito");
+    return res.json("Ha sido actualizado con éxito.");
   } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
       message: "No se ha actualizado el portfolio",
-      // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }

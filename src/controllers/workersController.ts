@@ -99,7 +99,7 @@ const updateWorkerById = async (req: Request, res: Response) => {
     const { formation, experience, is_active } = req.body;
 
     //Comprobamos que el usuario exista
-    if (!worker || worker.is_active == false) {
+    if (!worker) {
       return res.status(403).json({ message: "El usuario no existe." });
     }
     // Declaramos el id, de esta forma, podemos indicar en el caso que sea super admin, el id del usuario que queremos modificar lo recuperaremos de la búsqueda o bien,

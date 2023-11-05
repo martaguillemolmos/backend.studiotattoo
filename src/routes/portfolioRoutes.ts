@@ -9,7 +9,8 @@ router.get ("/", getPortfolio)
 //Ruta para poder crear un nuevo portfolio
 router.post ("/:id?", auth, createPortfolio)
 
-router.put ("/:id", updatePortfolioById)
+//Super_admin y Admin: Actualizar un portfolio
+router.put ("/:id?", auth, updatePortfolioById)
 
 router.delete ("/:id", deletePortfolioById)
 

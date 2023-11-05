@@ -15,6 +15,9 @@ export class Portfolio extends BaseEntity {
   product_id!: number;
 
   @Column()
+  is_active!: boolean;
+
+  @Column()
   created_at!: Date;
 
   @Column()

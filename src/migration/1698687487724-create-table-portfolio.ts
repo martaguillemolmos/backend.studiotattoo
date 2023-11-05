@@ -21,6 +21,10 @@ export class CreateTablePortfolio1698687487724 implements MigrationInterface {
             name: "product_id",
             type: "int",
           },
+          { name: "is_active",
+            type: "boolean",
+            default: "true",
+          },
           {
             name: "created_at",
             type: "timestamp",

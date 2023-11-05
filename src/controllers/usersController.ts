@@ -13,11 +13,11 @@ const createUser = async (req: Request, res: Response) => {
 
     //Creamos un objeto para la validación 
     const Uservalidate = new Users();
-    Uservalidate.name = name;
-    Uservalidate.surname = surname;
+    Uservalidate.name = name.trim();
+    Uservalidate.surname = surname.trim();
     Uservalidate.phone = phone;
     Uservalidate.email = email;
-    Uservalidate.password = password;
+    Uservalidate.password = password.trim();
     Uservalidate.is_active = true;
     Uservalidate.role = "user";
     Uservalidate.update_at = new Date(
@@ -282,7 +282,7 @@ const updatePassword = async (req: Request, res: Response) => {
       return res.json("Debes añadir un campo.");
     }
     // Validación que el password contiene como mínimo y como máximo.
-    if(password.length < 6 || password.length >12) {
+    if(password.trim () !== password.length < 6 || password.length >12) {
       return res.json ("El password debe contener de 6 a 12 caracteres.")
     }
     // Validación que el password contiene como mínimo y como máximo.
@@ -297,7 +297,7 @@ const updatePassword = async (req: Request, res: Response) => {
     if (passwordOld !== password) {
       if (bcrypt.compareSync(passwordOld, user.password)) {
         console.log("aqui entra");
-        const encryptedPassword = bcrypt.hashSync(password, 10);
+        const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
         await Users.update(
           {
             id: req.token.id,

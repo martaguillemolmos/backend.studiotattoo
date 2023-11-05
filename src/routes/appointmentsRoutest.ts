@@ -20,7 +20,7 @@ router.get('/worker', auth, getAppointmentsByWorkerId)
 //Usuario: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
 router.put ('/user', auth, updateAppointmentUser)
 
-//Trabajador: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
+//Trabajador: Actualizar el status de la cita.
 router.put ('/worker', auth, updateAppointmentWorker)
 
 //Super_Admin: Eliminar citas.

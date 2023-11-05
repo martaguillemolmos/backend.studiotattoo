@@ -79,6 +79,7 @@ const loginUser = async (req: Request, res: Response) => {
     // Recuperamos los datos guardados en body
     const { email, password } = req.body;
 
+    // Comprobamos que nos envían characteres.
     if (
       !req.body.email ||
       !req.body.password ||
@@ -87,13 +88,20 @@ const loginUser = async (req: Request, res: Response) => {
     ) {
       return res.json({
         success: true,
-        message: "Credenciales incorrectas",
+        message: "Introduce usuario y contraseña.",
       });
     }
 
     // Validación de que el email sea @
-    // Validación que el password contiene como mínimo y como máximo.
+    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (!emailRegex.test(email)){
+      return res.json("Formato de email incorrecto.")
+    }
 
+    // Validación que el password contiene como mínimo y como máximo.
+    if(password.length < 6 || password.length >12) {
+      return res.json ("El password debe contener de 6 a 12 caracteres.")
+    }
     //Consultar en BD si el usuario existe
     const user = await Users.findOneBy({
       email: email.trim(),

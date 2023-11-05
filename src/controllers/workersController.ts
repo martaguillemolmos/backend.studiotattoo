@@ -12,10 +12,10 @@ const createWorker = async (req: Request, res: Response) => {
     const user = await Users.findOneBy({ id: user_id });
     const worker = await Worker.findOneBy ({user_id : user_id})
 
-    if (!user) {
+    if (!user || user.is_active == false) {
       return res.json({
         succes: false,
-        message: "No se ha encontrado el usuario",
+        message: "El usuario no existe.",
         error: error,
       });
     } 
@@ -99,8 +99,8 @@ const updateWorkerById = async (req: Request, res: Response) => {
     const { formation, experience, is_active } = req.body;
 
     //Comprobamos que el usuario exista
-    if (!worker) {
-      return res.status(403).json({ message: "Usuario no encontrado" });
+    if (!worker || worker.is_active == false) {
+      return res.status(403).json({ message: "El usuario no existe." });
     }
     // Declaramos el id, de esta forma, podemos indicar en el caso que sea super admin, el id del usuario que queremos modificar lo recuperaremos de la búsqueda o bien,
     //en el caso que sea el propio usuario que quiera modificar sus datos, el id lo recuperamos del token.

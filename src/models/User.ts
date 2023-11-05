@@ -59,6 +59,11 @@ export class Users extends BaseEntity {
   @IsDate()
   update_at!: Date
 
+  
+ //Declaramos la relación que existe entre User y la tabla intermedia, Appoiment
+ @OneToMany ( () => Appointment, (appointment) => appointment.userAppointment)
+ userAppointments! : Appointment [];
+
   @ManyToMany ( () => Worker)
   @JoinTable ({
     name:"appointment",
@@ -71,11 +76,6 @@ export class Users extends BaseEntity {
         referencedColumnName:"id",
     }
   })
-// Aquí nos devuelve una array de objetos, si no indicamos [], tan sólo nos devolvería un objeto.
  userWorkers!:Worker [];
-
- //Declaramos la relación que existe entre User y la tabla intermedia, Appoiment
- @OneToMany ( () => Appointment, (appointment) => appointment.userAppointment)
- userAppointments! : Appointment [];
 }
 

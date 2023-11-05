@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Portfolio } from "../models/Portfolio";
-import { Users } from "../models/User";
 import { Worker } from "../models/Worker";
 
 // Recuperar todos los portfolios
@@ -35,10 +34,9 @@ const createPortfolio = async (req: Request, res: Response) => {
       worker = await Worker.findOne({
         where: { id: parseInt(req.params.id) },
       });
-      console.log("Este es el id que hemos enviado", worker);
     } else if (
       req.token.role !== "super_admin" &&
-      req.token.is_active == true
+      req.token.is_active === true
     ) {
       worker = await Worker.findOne({
         where: { user_id: req.token.id },
@@ -46,12 +44,26 @@ const createPortfolio = async (req: Request, res: Response) => {
     } else {
       return res.status(403).json({ message: "Usuario no autorizado" });
     }
+
+    if (!worker || worker.is_active == false){
+      return res.json ("El usuario no existe.")
+    }
+
+
     const { product_id } = req.body;
+    
+    const existPortfolio = await Portfolio.findOne({
+      where: { worker_id: worker.id, product_id },
+    });
+
+    if (existPortfolio) {
+      return res.json("El trabajador ya tiene un portfolio con este producto.");
+    }
+    
     const newPortfolio = await Portfolio.create({
       worker_id: worker?.id,
       product_id,
     }).save();
-
     return res.json(newPortfolio);
   } catch (error) {
     console.log(error);
@@ -63,6 +75,7 @@ const createPortfolio = async (req: Request, res: Response) => {
   }
 };
 
+//Superadmin y Admin: Actualizar un portfolio.
 const updatePortfolioById = async (req: Request, res: Response) => {
   try {
     //Lógica para actualizar portfolio

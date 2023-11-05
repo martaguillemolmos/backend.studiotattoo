@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
 import { Users } from "../models/User";
+import { Portfolio } from "../models/Portfolio";
 
-// Usuario: Crear una cita
+// Usuario y admin: Crear una cita
+// Me gustaría modificar la forma de devolver la información cuando se crea la cita.
 const createAppointment = async(req: Request, res: Response) => {
     try {
-      if (req.token.role == "user" && req.token.is_active == true) {
+      if (req.token.role == "user", "admin" && req.token.is_active == true) {
         //Recuperar el id del usuario por su token
         const user = await Users.findOne({
           where: { id: req.token.id },
@@ -15,18 +17,41 @@ const createAppointment = async(req: Request, res: Response) => {
           return res.json("El usuario no existe.")
         }
       
-        const {artist, portfolio_id, day, hour} = req.body
-        const newAppointment = await Appointment.create({
+        const  { portfolio_id, day, hour} = req.body
+
+        const existPortfolio = await Portfolio.findOne ({
+          where : {id: portfolio_id}
+        });
+
+        const worker_id = existPortfolio?.worker_id
+
+        if(!existPortfolio){
+          return res.json ("El portfolio no existe.")
+        }
+
+        if(user.id == worker_id){
+          return res.json("Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo.")
+        }
+        
+        const existAppointment = await Appointment.findOne({
+          where: { artist: worker_id, day, hour },
+        });
+
+        if(existAppointment){
+          return res.json("Cita no disponible: Introduce otra fecha y hora.")
+        }
+
+          const newAppointment = await Appointment.create({
             client : user.id,
-            artist,
             portfolio_id,
+            artist : worker_id,
             day,
             hour,
         }).save()
         return res.json (newAppointment)
     
-        } }
-        catch (error) {
+        } return res.json ("Usuario no autorizado.")
+      } catch (error) {
         console.log(error);
         return res.json({
           succes: false,

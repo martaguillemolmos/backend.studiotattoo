@@ -95,6 +95,7 @@ const getAllAppointments = async (req: Request, res: Response) => {
 };
 
 //Recuperar todas las citas del cliente.
+//-- Me gustaría optimizar: cuando nos devuelve los resultados
 const getAppointmentsByUserId = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
@@ -130,6 +131,7 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
 };
 
 //Recuperar todas las citas del trabajador.
+//-- Me gustaría optimizar: cuando nos devuelve los resultados
 const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
   try {
     if ((req.token.role == "admin" && req.token.is_active == true)) {
@@ -205,15 +207,16 @@ const updateAppointment = async (req: Request, res: Response) => {
   }
 };
 
+//Super_Admin: Eliminar citas.
 const deleteAppointment = async (req: Request, res: Response) => {
   try {
-    const appointmentIdToDelete = req.params.id;
+    const appointmentIdToDelete = req.body.id;
     const appointmentToRemove = await Appointment.findOneBy({
       id: parseInt(appointmentIdToDelete),
     });
 
     if (!appointmentToRemove) {
-      return res.json("La cita que quieres eliminar no exste.");
+      return res.json("La cita que quieres eliminar no existe.");
     }
     const appointmentRemoved = await Appointment.remove(
       appointmentToRemove as Appointment

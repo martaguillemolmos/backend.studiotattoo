@@ -19,6 +19,8 @@ router.get('/worker', auth, getAppointmentsByWorkerId)
 
 
 router.put ('/', updateAppointment)
-router.delete ('/', deleteAppointment)
+
+//Super_Admin: Eliminar citas.
+router.delete ('/',auth, isSuperAdmin, deleteAppointment)
 
 export {router}

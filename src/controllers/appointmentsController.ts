@@ -252,7 +252,58 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
   }
 };
 
+//Worker: Actualizar el estado de una cita.
+//-- Me gustaría optimizar: cuando nos devuelve los resultados
+const updateAppointmentWorker = async (req: Request, res: Response) => {
+  try {
+    if (req.token.role == "admin" && req.token.is_active == true) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+      });
 
+      if (!user) {
+        return res.json("El usuario no existe.");
+      }
+
+      const worker = await Worker.findOne({
+        where: { user_id: user.id },
+      });
+
+      if (!worker) {
+        return res.json("Este usuario no es un trabajador.");
+      }
+
+      const { id, status_appointment} = req.body;
+
+      const appointment = await Appointment.find({
+        where: { id: id, artist: worker.id },
+      });
+
+      if(!appointment){
+        return res.json ("No puedes actualizar una cita de otro trabajador.")
+      }
+
+      await Appointment.update(
+        {
+          id: parseInt(id),
+        },
+        {
+          status_appointment,
+        }
+      );
+        }
+      return res.json("La cita ha sido actualizada con éxito");
+
+    } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha actualizado la cita",
+      error: error,
+    });
+  }
+};
 
 //Super_Admin: Eliminar citas.
 const deleteAppointment = async (req: Request, res: Response) => {
@@ -289,4 +340,5 @@ export {
   deleteAppointment,
   getAppointmentsByUserId,
   getAppointmentsByWorkerId,
+  updateAppointmentWorker,
 };

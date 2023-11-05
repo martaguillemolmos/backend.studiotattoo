@@ -40,8 +40,9 @@ export class Appointment extends BaseEntity {
     update_at!: Date;
 
     //Declaramos la relación que existe entre esta tabla y la tabla Portfolio.
-    // @OneToMany (() => Portfolio, (portfolio) => portfolio.portfolioAppointment)
-    // portfolioAppointments! : Portfolio []
+    @ManyToOne(() => Portfolio, (portfolio) => portfolio.appointments)
+    @JoinColumn({ name: "portfolio_id" })
+    portfolio!: Portfolio;
 
     //Declaramos la relación que existe entre esta tabla y Users.
     @ManyToOne ( () => Users , (user) => user.userAppointments)

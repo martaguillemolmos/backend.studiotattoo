@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Appointment } from "./Appointment";
 import { Worker } from "./Worker";
 import { Product } from "./Product";
@@ -24,9 +24,8 @@ export class Portfolio extends BaseEntity {
   update_at!: Date;
 
   // Declaramos la relación que existe entre esta tabla y la tabla Appointment.
-  // @ManyToOne ( () => Appointment, (appointment) => appointment.portfolioAppointments)
-  // @JoinColumn ({name: "portfolio_id"})
-  // portfolioAppointment!: Appointment;
+  @OneToMany(() => Appointment, (appointment) => appointment.portfolio)
+  appointments!: Appointment[];
 
   //Declaramos la relación que existe entre esta tabla y Workers.
   @ManyToOne ( () => Worker , (worker) => worker.workerAppointments)

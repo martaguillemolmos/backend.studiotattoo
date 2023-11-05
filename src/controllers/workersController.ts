@@ -46,7 +46,6 @@ const createWorker = async (req: Request, res: Response) => {
     return res.json({
       succes: false,
       message: "No hemos creado ningun trabajador",
-      // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }

@@ -9,13 +9,15 @@ const getPortfolio = async (req: Request, res: Response) => {
     const portfolios = await Portfolio.find({
       relations: ["workerAppointment", "portfolioWorker"],
     });
+    if (portfolios.length == 0){
+      return res.json ("Actualmente no existen portfolios.")
+    }
     return res.json(portfolios);
   } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
       message: "No se ha podido realizar la consulta",
-      // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }
@@ -166,7 +168,6 @@ const deletePortfolioById = async (req: Request, res: Response) => {
     return res.json({
       succes: false,
       message: "No se ha eliminado el portfolio",
-      // esto lo utilizamos para que nos salte el tipo de error
       error: error,
     });
   }

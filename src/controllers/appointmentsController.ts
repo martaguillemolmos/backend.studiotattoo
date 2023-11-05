@@ -190,6 +190,7 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
   }
 };
 
+// Worker: Puedan acceder a sus citas y filtrarlas por el estado.
 const getAppointmentsStatusByWorkerId = async (req: Request, res: Response) => {
   try {
     if (req.token.role == "admin" && req.token.is_active == true) {
@@ -220,7 +221,6 @@ const getAppointmentsStatusByWorkerId = async (req: Request, res: Response) => {
       if (appointments.length === 0) {
         return res.json("Actualmente no existen citas para este usuario.");
       }
-
       return res.json(appointments);
     } else {
       return res.json("Usuario no autorizado.");
@@ -312,6 +312,8 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
       );
 
       return res.json("La cita ha sido actualizada con éxito");
+    } else {
+      return res.json("Usuario no autorizado.");
     }
   } catch (error) {
     console.log(error);
@@ -365,8 +367,9 @@ const updateAppointmentWorker = async (req: Request, res: Response) => {
       );
 
       return res.json("La cita se ha actualizado con éxito.");
+    } else {
+      return res.json("Usuario no autorizado.");
     }
-    return res.json("No tienes autorización.");
   } catch (error) {
     console.log(error);
     return res.json({

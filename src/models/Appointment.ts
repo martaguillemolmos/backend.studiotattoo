@@ -25,10 +25,7 @@ export class Appointment extends BaseEntity {
     portfolio_id!: number;
 
     @Column()
-    day!: string;
-
-    @Column()
-    hour!: string;
+    date!: Date;
 
     @Column({type:"enum", enum: Status})
     status_appointment!: string;

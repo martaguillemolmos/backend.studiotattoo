@@ -26,14 +26,8 @@ export class CreateTableAppointment1698769661453 implements MigrationInterface {
             type: "int",
           },
           {
-            name: "day",
-            type: "varchar",
-            length: "10",
-          },
-          {
-            name: "hour",
-            type: "varchar",
-            length: "5",
+            name: "date",
+            type: "timestamp",
           },
           {
             name: "status_appointment",

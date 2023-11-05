@@ -3,6 +3,7 @@ import { Appointment } from "../models/Appointment";
 import { Users } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
 import { Worker } from "../models/Worker";
+import dayjs from "dayjs";
 
 // Usuario y admin: Crear una cita
 // Me gustaría modificar la forma de devolver la información cuando se crea la cita.
@@ -19,7 +20,7 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-      const { portfolio_id, day, hour } = req.body;
+      const { portfolio_id, date } = req.body;
 
       const existPortfolio = await Portfolio.findOne({
         where: { id: portfolio_id },
@@ -39,6 +40,16 @@ const createAppointment = async (req: Request, res: Response) => {
         return res.json("El portfolio no existe.");
       }
 
+      const dateBody = dayjs(date, "DD/MM/YYYY HH:mm");
+
+      if (!dateBody.isValid()) {
+        return res.json("El formato de la fecha no es válido. Es DD/MM/YYYY HH:mm ");
+      }
+
+      if (!dateBody) {
+        return res.json("La fecha y hora no puede ser nula.");
+      }
+
       if (user.id == worker.user_id) {
         return res.json(
           "Política de empresa: Un trabajador no puede hacerse un tatuaje él mismo."
@@ -46,7 +57,7 @@ const createAppointment = async (req: Request, res: Response) => {
       }
 
       const existAppointment = await Appointment.findOne({
-        where: { artist: worker_id, day, hour },
+        where: { artist: worker_id, date: dateBody.toDate() },
       });
 
       if (existAppointment) {
@@ -57,8 +68,7 @@ const createAppointment = async (req: Request, res: Response) => {
         client: user.id,
         portfolio_id,
         artist: worker_id,
-        day,
-        hour,
+        date: dateBody.toDate(),
       }).save();
       return res.json(newAppointment);
     }
@@ -188,7 +198,7 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
         return res.json("El usuario no existe.");
       }
 
-      const { appointmentId, portfolio_id, day, hour, is_active } = req.body;
+      const { appointmentId, portfolio_id, date, is_active } = req.body;
 
       const existPortfolio = await Portfolio.findOne({
         where: { id: portfolio_id },
@@ -215,7 +225,7 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
       }
 
       const existAppointment = await Appointment.findOne({
-        where: { artist: worker_id, day, hour },
+        where: { artist: worker_id, date },
       });
 
       if (existAppointment) {
@@ -232,8 +242,7 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
           client: user.id,
           portfolio_id,
           artist: worker_id,
-          day,
-          hour,
+          date,
           status_appointment,
           is_active,
         }

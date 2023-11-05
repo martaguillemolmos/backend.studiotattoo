@@ -41,10 +41,11 @@ const createAppointment = async (req: Request, res: Response) => {
 
       const dateBody = dayjs(date, "'{AAAA} MM-DDTHH:mm:ss SSS [Z] A'");
       const dateNow = dayjs();
-    
 
       if (!dateBody.isValid() || dateBody < dateNow) {
-        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' ");
+        return res.json(
+          "El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' "
+        );
       }
 
       if (!dateBody) {
@@ -90,7 +91,7 @@ const createAppointment = async (req: Request, res: Response) => {
 const getAllAppointments = async (req: Request, res: Response) => {
   try {
     const appointments = await Appointment.find({
-      relations : [ "portfolio", "userAppointment", "workerAppointment"],
+      relations: ["portfolio", "userAppointment", "workerAppointment"],
     });
     if (appointments.length == 0) {
       return res.json("Actualmente no existen portfolios.");
@@ -122,7 +123,7 @@ const getAppointmentsByUserId = async (req: Request, res: Response) => {
 
       const appointments = await Appointment.find({
         where: { client: user.id },
-        relations : [ "portfolio", "userAppointment", "workerAppointment"],
+        relations: ["portfolio", "userAppointment", "workerAppointment"],
       });
 
       if (appointments.length === 0) {
@@ -168,7 +169,52 @@ const getAppointmentsByWorkerId = async (req: Request, res: Response) => {
 
       const appointments = await Appointment.find({
         where: { artist: worker.id },
-        relations : [ "portfolio", "userAppointment", "workerAppointment"],
+        relations: ["portfolio", "userAppointment", "workerAppointment"],
+      });
+
+      if (appointments.length === 0) {
+        return res.json("Actualmente no existen citas para este usuario.");
+      }
+
+      return res.json(appointments);
+    } else {
+      return res.json("Usuario no autorizado.");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      succes: false,
+      message: "No se ha podido realizar la consulta",
+      error: error,
+    });
+  }
+};
+
+const getAppointmentsStatusByWorkerId = async (req: Request, res: Response) => {
+  try {
+    if (req.token.role == "admin" && req.token.is_active == true) {
+      //Recuperar el id del usuario por su token
+      const user = await Users.findOne({
+        where: { id: req.token.id },
+      });
+
+      if (!user) {
+        return res.json("El usuario no existe.");
+      }
+
+      const worker = await Worker.findOne({
+        where: { user_id: user.id },
+      });
+
+      if (!worker) {
+        return res.json("Este usuario no es un trabajador.");
+      }
+
+      const { status } = req.params;
+
+      const appointments = await Appointment.find({
+        where: { artist: worker.id, status_appointment: status },
+        relations: ["portfolio", "userAppointment", "workerAppointment"],
       });
 
       if (appointments.length === 0) {
@@ -224,10 +270,11 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
 
       const dateBody = dayjs(date, "'{AAAA} MM-DDTHH:mm:ss SSS [Z] A'");
       const dateNow = dayjs();
-    
 
       if (!dateBody.isValid() || dateBody < dateNow) {
-        return res.json("El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' ");
+        return res.json(
+          "El formato de la fecha no es válida o es anterior a la creación de la cita. Es {AAAA} MM-DDTHH:mm:ss SSS [Z] A' "
+        );
       }
 
       if (!dateBody) {
@@ -298,14 +345,14 @@ const updateAppointmentWorker = async (req: Request, res: Response) => {
         return res.json("Este usuario no es un trabajador.");
       }
 
-      const { id, status_appointment} = req.body;
+      const { id, status_appointment } = req.body;
 
-      const appointment = await Appointment.find({
+      const appointment = await Appointment.findOne({
         where: { id: id, artist: worker.id },
       });
 
-      if(!appointment){
-        return res.json ("No puedes actualizar una cita de otro trabajador.")
+      if (!appointment) {
+        return res.json("No puedes actualizar una cita de otro trabajador.");
       }
 
       await Appointment.update(
@@ -316,10 +363,11 @@ const updateAppointmentWorker = async (req: Request, res: Response) => {
           status_appointment,
         }
       );
-        }
-      return res.json("La cita ha sido actualizada con éxito");
 
-    } catch (error) {
+      return res.json("La cita se ha actualizado con éxito.");
+    }
+    return res.json("No tienes autorización.");
+  } catch (error) {
     console.log(error);
     return res.json({
       succes: false,
@@ -365,4 +413,5 @@ export {
   getAppointmentsByUserId,
   getAppointmentsByWorkerId,
   updateAppointmentWorker,
+  getAppointmentsStatusByWorkerId,
 };

@@ -105,7 +105,7 @@ const updateWorkerById = async (req: Request, res: Response) => {
       return res.json ("Experience: Número máx. de caracteres 300.")
     }
 
-
+    
     //Comprobamos que el usuario exista
     if (!worker) {
       return res.status(403).json({ message: "El usuario no existe." });

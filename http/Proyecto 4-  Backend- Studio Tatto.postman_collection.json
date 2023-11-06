@@ -562,24 +562,6 @@
 					"response": []
 				},
 				{
-					"name": "MODIFICAR UNA CITA",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "localhost:4000/appointment",
-							"host": [
-								"localhost"
-							],
-							"port": "4000",
-							"path": [
-								"appointment"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "ELIMINAR CITA",
 					"request": {
 						"method": "DELETE",

@@ -337,6 +337,7 @@ En el caso del Super_Admin, recupera el id del trabajador al que se va a relacio
         {
             "product_id":
         }
+
 <h5> 2- Actualizar un portfolio </h5>
 - Descripción: El Super_Admin puede actualizar cualquier portfolio, en cambio, los trabajadores, tan sólo pueden actualizar un portfolio que les pertenezca a ellos.
 Los trabajadores no pueden eliminar un portfolio, tan sólo pueden desactivarlos, is_active = false.
@@ -372,11 +373,132 @@ Los trabajadores no pueden eliminar un portfolio, tan sólo pueden desactivarlos
 <h5> 4- Recuperar la información de todos los portfolios. </h5>
 - Descripción: Solo los usuarios registrados pueden acceder a la información de todos los portfolios.
 
+        Auth : Super_Admin, Admin y User
+        Barer token : Token
+
         http
         GET http://localhost:4000/portfolio
 
 </details>
+
+<details>
+<summary><h4>/appointment</h4></summary>
+<h5> 1- Crear una cita </h5>
+- Descripción: Tan sólo los usuarios con los roles de "users" y "admin", el último caso se refiere a los trabajadores pueden crear una cita.
+Recuperamos el id del cliente a través del token, independientemente del rol que tenga y por otro lado, el id del artista a través del portfolio que hemos seleccionado.
+
+        Auth : User y Admin
+        Barer token : Token
+
+        http
+        POST http://localhost:4000/appointment
+        
+        
+        json
+        {
+            "portfolio_id":
+            "date": '{AAAA} MM-DDTHH:mm:ss SSS [Z] A',
+        }
+        - Ambos campos son obligatorios para poder crear una cita.
+    
+    Al crear la cita, el estado de la misma, adquiere el valor "pending". Y, este estado tan sólo lo podrá modificar el trabajador.
+
+<h5> 2- User: Actualizar una cita </h5>
+- Descripción: El usuario, independientemente del rol que tenga: user o admin. Puede modificar una de las citas que ha solicitado.
+
+        Auth : Super_Admin y Admin
+        Barer token : Token
+
+        http
+        PUT http://localhost:4000/appointment/user
+        
+        
+        json
+        {
+            "appointmentId":
+            "portfolio_id":
+            "date":
+            "is_active": 
+        }
+        - El único campo que es obligatorio es el appointmentId, acompañado del campo que se quiera actualizar.
+
+    Al realizar la actualización, el campo status, vuelve a transformarse en pendiente.
+
+<h5> 3- Worker: Actualizar una cita </h5>
+- Descripción: El trabajador puede modificar el estado de la cita.
+
+        Auth : Admin
+        Barer token : Token
+
+        http
+        PUT http://localhost:4000/appointment/worker
+        
+        
+        json
+        {
+            "id": 
+            "status_appointment": 
+        }
+        - El único campo que es obligatorio es el id, acompañado del campo que se quiera actualizar.
+
+<h5> 4- Eliminar una cita </h5>
+- Descripción: A través de esta ruta, el Super_Admin, podrá eliminar una cita por su Id.
+
+        Auth : Super_Admin
+        Barer token : Token
+        
+        http
+        DELETE http://localhost:4000/appointment
+
+        json
+        {
+            "id":   
+        } 
+
+<h5> 4- Recuperar la información de todas las citas </h5>
+- Descripción: Solo el Super_Admin podrá acceder a la información de todas las citas.
+
+        Auth : Super_Admin
+        Barer token : Token
+
+        http
+        GET http://localhost:4000/appointment
+
+<h5> 5- User: Recuperar la información de todos las citas. </h5>
+- Descripción: El usuario podrá acceder a la información de todas las citas.
+
+        Auth : User
+        Barer token : Token
+
+        http
+        GET http://localhost:4000/appointment/user
+
+<h5> 6- Admin: Recuperar la información de todos las citas. </h5>
+- Descripción: El trabajador podrá acceder a la información de todas las citas.
+
+        Auth : Admin
+        Barer token : Token
+
+        http
+        GET http://localhost:4000/appointment/worker
+
+<h5> 7- Admin: Recuperar la información de todos las citas, filtrandolas por su status. </h5>
+- Descripción: El trabajador podrá acceder a la información de todas las citas, filtrado el estado de las mismas previamente.
+
+        Auth : Admin
+        Barer token : Token
+
+        http
+        GET http://localhost:4000/appointment/status
+
+        json
+            {
+                "status":   
+            } 
+
+
 </details>
+
 <p align="center">_______________________________________________</p>
 
 ## ⚙️ Instrucciones de uso

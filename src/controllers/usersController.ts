@@ -276,7 +276,7 @@ const updatePassword = async (req: Request, res: Response) => {
       return res.json("Debes añadir un campo.");
     }
     // Validación que el password contiene como mínimo y como máximo.
-    if(password.trim () !== password.length < 6 || password.length >12) {
+    if(password.length < 6 || password.length >12) {
       return res.json ("El password debe contener de 6 a 12 caracteres.")
     }
     // Validación que el password contiene como mínimo y como máximo.

@@ -3,7 +3,7 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 
 <p>
    <div align="center">
-      <img src="./img_readme/cabeceraRedme.png style="max-width: 100%;" width="250">
+      <img src="./img_readme/cabecera.jpg">
    </div>    
 </p>
 

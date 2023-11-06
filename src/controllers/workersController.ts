@@ -52,11 +52,36 @@ const createWorker = async (req: Request, res: Response) => {
 };
 
 // Super_Admin: Acceder a todos los trabajadores.
-//Mejoras: Organizar la información que nos devuelve.
 const getAllWorkers = async (req: any, res: Response) => {
   //lógica para crear un nuevo trabajador.
   try {
-    const workers = await Worker.find({ relations: ["users"] });
+    const workers = await Worker.find({
+      select: {
+        id: true,
+        user_id: false,
+        is_active: false,
+        formation:true,
+        experience: true,
+        contracted_at: true,
+        update_at: true,
+        users: {
+          id: false,
+          name: true,
+          surname: true,
+          phone: true,
+          email: true,
+          password: false,
+          is_active: false,
+          role: false,
+          created_at: false,
+          update_at: false
+        }
+      },
+      relations: {
+        users: true,
+      },
+    }
+  )
     if (workers.length == 0) {
       return res.json("No hay trabajadores registrados.");
     } else {

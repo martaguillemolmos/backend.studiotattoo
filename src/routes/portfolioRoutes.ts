@@ -6,7 +6,7 @@ import { isSuperAdmin } from "../middelware/isSuperAdmin";
 const router = Router ()
 
 //Acceder a todos los portfolios.
-router.get ("/", getPortfolio)
+router.get ("/", auth, getPortfolio)
 
 //Super_admin y Admin: crear un nuevo portfolio
 router.post ("/:id?", auth, createPortfolio)

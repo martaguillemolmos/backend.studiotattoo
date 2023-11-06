@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Toni\",\r\n    \"surname\": \"Olmos\",\r\n    \"phone\": 627555222,\r\n    \"email\": \"toni@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Sa\",\r\n    \"surname\": \"Guillem Olmos\",\r\n    \"phone\": 627880704,\r\n    \"email\": \"saraguillem1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -68,13 +68,23 @@
 					"response": []
 				},
 				{
-					"name": "ACTUALIZAR USUARIO",
+					"name": "User / Superadmin: ACTUALIZAR USUARIO",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsInJvbGUiOiJ1c2VyIiwiaXNfYWN0aXZlIjp0cnVlLCJpYXQiOjE2OTkwMjExMTAsImV4cCI6MTY5OTAyODMxMH0.E5YfGXNRaPRGxgKunFfXIBuGbQgbH7Cs9oW9HCnIhsY\n",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"password\": \r\n}",
+							"raw": "{\r\n\r\n\"name\": \"mARI PUTI\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,14 +92,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:4000/user/1",
+							"raw": "localhost:4000/user",
 							"host": [
 								"localhost"
 							],
 							"port": "4000",
 							"path": [
-								"user",
-								"1"
+								"user"
 							]
 						}
 					},
@@ -100,6 +109,15 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 27\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:4000/user",
 							"host": [
@@ -120,7 +138,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"mart77@gl.com\",\r\n    \"password\": \"1234567\"\r\n}",
+							"raw": "    {\r\n    \"email\": \"saraguillem22@gmail.com\",\r\n    \"password\": \"1234561\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,6 +195,44 @@
 							"path": [
 								"user",
 								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ACTUALIZAR PASSWORD",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsInJvbGUiOiJ1c2VyIiwiaXNfYWN0aXZlIjp0cnVlLCJpYXQiOjE2OTkwMjExMTAsImV4cCI6MTY5OTAyODMxMH0.E5YfGXNRaPRGxgKunFfXIBuGbQgbH7Cs9oW9HCnIhsY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"email\": \"martetaguillem1@gmail.com\",\r\n\"passwordOld\": \"1234\",\r\n\"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/user/password",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"user",
+								"password"
 							]
 						}
 					},
@@ -536,6 +592,143 @@
 							"port": "4000",
 							"path": [
 								"appointment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INFORMACIÓN CITAS USUARIO",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/appointment/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INFORMACIÓN CITAS TRABAJADORES",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/appointment/worker",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment",
+								"worker"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USUARIO: ACTUALIZAR CITA",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/appointment/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRABAJADOR: ACTUALIZAR ESTADO CITA",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/appointment/worker",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment",
+								"worker"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRABAJADOR: FILTRAR LAS CITAS POR SU ESTADO.",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/appointment/status",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"appointment",
+								"status"
 							]
 						}
 					},

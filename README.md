@@ -319,6 +319,64 @@ Al eliminarlo, modificaremos el rol de admin a user.
         GET http://localhost:4000/product
 
 </details>
+
+<details>
+<summary><h4>/portfolio</h4></summary>
+<h5> 1- Crear un portfolio </h5>
+- Descripción: Tan sólo el super_admin y los trabajadores pueden crear un portfolio. En este caso, hemos utilizado la misma ruta para poder llevar a cabo esta función.
+En el caso del Super_Admin, recupera el id del trabajador al que se va a relacionar dicho producto por el navegador. En el caso de contar con un rol Admin, el id del trabajador lo recuperará del token.
+
+        Auth : Super_Admin y Admin
+        Barer token : Token
+
+        http
+        POST http://localhost:4000/portfolio/:id?
+        
+        
+        json
+        {
+            "product_id":
+        }
+<h5> 2- Actualizar un portfolio </h5>
+- Descripción: El Super_Admin puede actualizar cualquier portfolio, en cambio, los trabajadores, tan sólo pueden actualizar un portfolio que les pertenezca a ellos.
+Los trabajadores no pueden eliminar un portfolio, tan sólo pueden desactivarlos, is_active = false.
+
+        Auth : Super_Admin y Admin
+        Barer token : Token
+
+        http
+        PUT http://localhost:4000/portfolio
+        
+        
+        json
+        {
+            "portfolio_id":
+            "product_id":
+            "is_active": 
+        }
+        - El único campo que es obligatorio es el portfolio_id, acompañado del campo que se quiera actualizar.
+
+<h5> 3- Eliminar un portfolio </h5>
+- Descripción: A través de esta ruta, eliminaremos un portfolio por su Id. Enviaremos la información del product_id que queremos eliminar a través del body.
+
+        Auth : Super_Admin
+        Barer token : Token
+        
+        http
+        DELETE http://localhost:4000/portfolio
+
+        json
+        {
+            "id":   
+        } 
+<h5> 4- Recuperar la información de todos los portfolios. </h5>
+- Descripción: Solo los usuarios registrados pueden acceder a la información de todos los portfolios.
+
+        http
+        GET http://localhost:4000/portfolio
+
+</details>
+</details>
 <p align="center">_______________________________________________</p>
 
 ## ⚙️ Instrucciones de uso

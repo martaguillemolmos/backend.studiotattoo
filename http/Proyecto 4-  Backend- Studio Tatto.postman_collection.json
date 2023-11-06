@@ -37,7 +37,7 @@
 					"response": []
 				},
 				{
-					"name": "RECUPERAR INFOR USUARIO",
+					"name": "Super_Admin: RECUPERAR INFOR USUARIO",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -68,7 +68,7 @@
 					"response": []
 				},
 				{
-					"name": "User / Superadmin: ACTUALIZAR USUARIO",
+					"name": "User / Super_Admin: ACTUALIZAR USUARIO",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -105,7 +105,7 @@
 					"response": []
 				},
 				{
-					"name": "ELIMINAR USUARIO",
+					"name": "Super_Admin: ELIMINAR USUARIO",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -132,7 +132,7 @@
 					"response": []
 				},
 				{
-					"name": "LOGIN USUARIO",
+					"name": "User / Admin /Super_Admin: LOGIN USUARIO",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -160,7 +160,7 @@
 					"response": []
 				},
 				{
-					"name": "ACCEDER AL PERFIL",
+					"name": "User / Admin / Super_Admin: ACCEDER AL PERFIL",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -201,7 +201,7 @@
 					"response": []
 				},
 				{
-					"name": "ACTUALIZAR PASSWORD",
+					"name": "User: ACTUALIZAR PASSWORD",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -244,7 +244,7 @@
 			"name": "Worker",
 			"item": [
 				{
-					"name": "RECUPERAR INFOR TRABAJADORES",
+					"name": "Super_Admin: RECUPERAR INFOR TRABAJADORES",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -263,7 +263,7 @@
 					"response": []
 				},
 				{
-					"name": "CREAR UN TRABAJADOR",
+					"name": "Super_Admin: CREAR UN TRABAJADOR",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -291,7 +291,7 @@
 					"response": []
 				},
 				{
-					"name": "ACTUALIZAR UN TRABAJADOR",
+					"name": "Admin / Super_Admin: ACTUALIZAR UN TRABAJADOR",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -319,7 +319,7 @@
 					"response": []
 				},
 				{
-					"name": "ELIMINAR UN TRABAJADOR",
+					"name": "Super_Admin: ELIMINAR UN TRABAJADOR",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -361,7 +361,7 @@
 					"response": []
 				},
 				{
-					"name": "CREAR PRODUCTO",
+					"name": "Admin / Super_Admin: CREAR PRODUCTO",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -388,7 +388,7 @@
 					"response": []
 				},
 				{
-					"name": "ELIMINAR PRODUCTO",
+					"name": "Super_Admin: ELIMINAR PRODUCTO",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -407,7 +407,7 @@
 					"response": []
 				},
 				{
-					"name": "ACTUALIZAR UN PRODUCTO POR SU ID",
+					"name": "Admin / Super_ Admin: ACTUALIZAR UN PRODUCTO POR SU ID",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -440,7 +440,7 @@
 			"name": "Portfolio",
 			"item": [
 				{
-					"name": "TODOS LOS PORTFOLIOS",
+					"name": "User / Admin / Super_Admin: TODOS LOS PORTFOLIOS",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -458,7 +458,7 @@
 					"response": []
 				},
 				{
-					"name": "CREAR UN PORTFOLIO",
+					"name": "Admin / Super_Admin: CREAR UN PORTFOLIO",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -485,7 +485,7 @@
 					"response": []
 				},
 				{
-					"name": "ACTUALIZAR UN PORTFOLIO",
+					"name": "Admin / Super_Admin: ACTUALIZAR UN PORTFOLIO",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -503,7 +503,7 @@
 					"response": []
 				},
 				{
-					"name": "ELIMINAR UN PORTFOLIO",
+					"name": "Super_Admin: ELIMINAR UN PORTFOLIO",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -526,7 +526,7 @@
 			"name": "Appointment",
 			"item": [
 				{
-					"name": "INFORMACIÓN CITAS",
+					"name": "Super_Admin: INFORMACIÓN CITAS",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -544,7 +544,7 @@
 					"response": []
 				},
 				{
-					"name": "CREAR CITAS",
+					"name": "User / Admin :CREAR CITAS",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -562,7 +562,7 @@
 					"response": []
 				},
 				{
-					"name": "ELIMINAR CITA",
+					"name": "Super_Admin: ELIMINAR CITA",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -580,7 +580,7 @@
 					"response": []
 				},
 				{
-					"name": "INFORMACIÓN CITAS USUARIO",
+					"name": "User : INFORMACIÓN CITAS USUARIO",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -609,7 +609,7 @@
 					"response": []
 				},
 				{
-					"name": "INFORMACIÓN CITAS TRABAJADORES",
+					"name": "Worker: INFORMACIÓN CITAS TRABAJADORES",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -638,7 +638,7 @@
 					"response": []
 				},
 				{
-					"name": "USUARIO: ACTUALIZAR CITA",
+					"name": "User: ACTUALIZAR CITA",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -657,7 +657,7 @@
 					"response": []
 				},
 				{
-					"name": "TRABAJADOR: ACTUALIZAR ESTADO CITA",
+					"name": "Admin : ACTUALIZAR ESTADO CITA",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -676,7 +676,7 @@
 					"response": []
 				},
 				{
-					"name": "TRABAJADOR: FILTRAR LAS CITAS POR SU ESTADO.",
+					"name": "Admin: FILTRAR LAS CITAS POR SU ESTADO.",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},

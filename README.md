@@ -10,13 +10,10 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 <p align="center">Backend de un estudio de tatuajes, por Marta Guillem Olmos.
 <br></p>
 
-<p align="center">_______________________________________________</p>
-
-
 
 ## 📋 Contenido del Readme
 
-- ### 🚀 [Descripción](#descripción)
+- ### 🚀 [Descripcion](#Descripcion)
 - ### 🎯 [Objectivo](#objectivo)
 - ### 🛠️ [Tecnologías Utilizadas](#tecnologías-utilizadas)
 - ### 📉 [Diagrama de la Base de Datos](#diagrama-de-la-base-de-datos)
@@ -25,13 +22,12 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 - ### 📧 [Contacto](#contacto)
 
 
-<p align="center">_______________________________________________</p>
 
-## 🚀 Descripción
+## 🚀 Descripcion
 
 En este proyecto, hemos recreado el backend de un estudio de tatuajes haciendo uso de tecnologías como Node.js, TypeScript, Express, MySQL, GIT y GitHub. El desarrollo de este proyecto se basa en una base de datos relacional gestionada con TypeORM. Hemos implementado diversos endpoints que detallaremos a continuación. Estos endpoints nos permiten restringir el acceso a las rutas, acceder a la información de la base de datos, actualizarla y eliminarla según sea necesario.
 
-<p align="center">_______________________________________________</p>
+
 
 ## 🎯 Objetivo
 
@@ -43,7 +39,7 @@ El proyecto "Estudio de tatuajes" se centra en crear un sistema backend sólido 
 - **Gestión de trabajadores y sus portfolios**: Brindar a los trabajadores la capacidad de crear nuevos productos que se incluirán en sus portfolios, así como permitirles modificar el estado de las citas. Además, también podrán solicitar citas como usuarios.
 
 En resumen, el proyecto tiene como objetivo principal la creación de un sistema completo de gestión de citas para un estudio de tatuajes, garantizando una experiencia de usuario intuitiva y segura.
-<p align="center">_______________________________________________</p>
+
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -68,9 +64,8 @@ En resumen, el proyecto tiene como objetivo principal la creación de un sistema
 </a>
 </div>
 
-
 </details>
-<p align="center">_______________________________________________</p>
+
 
 ## 📉 Diagrama de la base de datos
 
@@ -80,7 +75,7 @@ En resumen, el proyecto tiene como objetivo principal la creación de un sistema
    </div>    
 </p>
 
-<p align="center">_______________________________________________</p>
+
 
 ## 💡 Endpoints
 <details>
@@ -499,7 +494,6 @@ Recuperamos el id del cliente a través del token, independientemente del rol qu
 
 </details>
 
-<p align="center">_______________________________________________</p>
 
 ## ⚙️ Instrucciones de uso
 
@@ -530,7 +524,7 @@ Recuperamos el id del cliente a través del token, independientemente del rol qu
 8. Usamos los endpoints almacenados en la carpeta http para usar las distintas funcionalidades que se han diseñado.
 
 </details>
-<p align="center">_______________________________________________</p>
+
 
 ## 📧 Contacto
 

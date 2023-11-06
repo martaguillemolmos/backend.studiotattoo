@@ -237,7 +237,7 @@ const getAppointmentsStatusByWorkerId = async (req: Request, res: Response) => {
 //Usuario: Actualizar cita: el portfolio o la fecha y a consecuencia, vuelva de nuevo el estado de solicitud.
 const updateAppointmentUser = async (req: Request, res: Response) => {
   try {
-    if ((req.token.role == "user", "admin" && req.token.is_active == true)) {
+    if (((req.token.role === "user" || req.token.role === "admin") && req.token.is_active == true)) {
       //Recuperar el id del usuario por su token
       const user = await Users.findOne({
         where: { id: req.token.id },
@@ -245,12 +245,24 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
 
       if (!user) {
         return res.json("El usuario no existe.");
-      }
+      }    
 
       const { appointmentId, portfolio_id, date, is_active } = req.body;
 
+      const userAppointment = await Appointment.findOne({
+        where: {id: appointmentId}
+      });
+
+      if (user.id !== userAppointment?.client) {
+        return res.json("No puedes modificar una cita de otro cliente.");
+      }
+      
+      if (!userAppointment){
+        return res.json ("La cita no existe.")
+      }
       const existPortfolio = await Portfolio.findOne({
         where: { id: portfolio_id },
+        
       });
 
       const worker_id = existPortfolio?.worker_id;
@@ -266,7 +278,7 @@ const updateAppointmentUser = async (req: Request, res: Response) => {
       if (!existPortfolio) {
         return res.json("El portfolio no existe.");
       }
-
+     
       const dateBody = dayjs(date, "'{AAAA} MM-DDTHH:mm:ss SSS [Z] A'");
       const dateNow = dayjs();
 

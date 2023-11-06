@@ -19,6 +19,7 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 - ### 📉 [Diagrama de la Base de Datos](#diagrama-de-la-base-de-datos)
 - ### 💡 [Endpoints](#endpoints)
 - ### ⚙️ [Instrucciones de uso](#instrucciones-de-uso)
+- ### 👏 [Agradecimientos](#agradecimientos)
 - ### 📧 [Contacto](#contacto)
 
 
@@ -525,6 +526,10 @@ Recuperamos el id del cliente a través del token, independientemente del rol qu
 
 </details>
 
+## 👏 Agradecimientos
+Este proyecto es el reflejo de todos los conocimientos que he adquirido hasta la fecha en el BootCamp FullStack Developer. 
+Este apartado lo quiero dedicar a mis profesores, Dani Tarazona y David Ochando. Gracias a sus clases, he sido capaz de desarrollar desde cero una base de datos, sin conocimientos previos. 
+Sus explicaciones del funcionamiento de la misma y la mentorización a la hora de desarrollar el esquema, ha hecho posible este proyecto.
 
 ## 📧 Contacto
 

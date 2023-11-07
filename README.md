@@ -13,7 +13,7 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 
 ## 📋 Contenido del Readme
 
-- ### 🚀 [Descripcion](#Descripcion)
+- ### 🚀 [Descripcion](#descripcion)
 - ### 🎯 [Objectivo](#objectivo)
 - ### 🛠️ [Tecnologías Utilizadas](#tecnologías-utilizadas)
 - ### 📉 [Diagrama de la Base de Datos](#diagrama-de-la-base-de-datos)
@@ -24,13 +24,13 @@ __<p align="center">Proyecto 4 - Full Stack Developer Bootcamp en GeeksHubs Acad
 
 
 
-## 🚀 Descripcion
+# Descripcion
 
 En este proyecto, hemos recreado el backend de un estudio de tatuajes haciendo uso de tecnologías como Node.js, TypeScript, Express, MySQL, GIT y GitHub. El desarrollo de este proyecto se basa en una base de datos relacional gestionada con TypeORM. Hemos implementado diversos endpoints que detallaremos a continuación. Estos endpoints nos permiten restringir el acceso a las rutas, acceder a la información de la base de datos, actualizarla y eliminarla según sea necesario.
 
 
 
-## 🎯 Objetivo
+# Objetivo
 
 El proyecto "Estudio de tatuajes" se centra en crear un sistema backend sólido y completo destinado a gestionar las citas en un estudio de tatuajes, cuyos objetivos son los siguientes:
 
@@ -42,7 +42,7 @@ El proyecto "Estudio de tatuajes" se centra en crear un sistema backend sólido 
 En resumen, el proyecto tiene como objetivo principal la creación de un sistema completo de gestión de citas para un estudio de tatuajes, garantizando una experiencia de usuario intuitiva y segura.
 
 
-## 🛠️ Tecnologías Utilizadas
+# Tecnologías Utilizadas
 
 <div align="center">
 <a href="https://www.mysql.com/">
@@ -68,7 +68,7 @@ En resumen, el proyecto tiene como objetivo principal la creación de un sistema
 </details>
 
 
-## 📉 Diagrama de la base de datos
+# Diagrama de la base de datos
 
 <p>
    <div align="center">
@@ -78,7 +78,7 @@ En resumen, el proyecto tiene como objetivo principal la creación de un sistema
 
 
 
-## 💡 Endpoints
+# Endpoints
 <details>
 <summary><h4>/user</h4></summary>
 
@@ -496,7 +496,7 @@ Recuperamos el id del cliente a través del token, independientemente del rol qu
 </details>
 
 
-## ⚙️ Instrucciones de uso
+# Instrucciones de uso
 
 <details>
 <summary> Instrucciones</summary>
@@ -526,12 +526,12 @@ Recuperamos el id del cliente a través del token, independientemente del rol qu
 
 </details>
 
-## 👏 Agradecimientos
+# Agradecimientos
 Este proyecto es el reflejo de todos los conocimientos que he adquirido hasta la fecha en el BootCamp FullStack Developer. 
 Este apartado lo quiero dedicar a mis profesores, Dani Tarazona y David Ochando. Gracias a sus clases, he sido capaz de desarrollar desde cero una base de datos, sin conocimientos previos. 
 Sus explicaciones del funcionamiento de la misma y la mentorización a la hora de desarrollar el esquema, ha hecho posible este proyecto.
 
-## 📧 Contacto
+# Contacto
 
 Puedes contactar conmigo por correo electrónico [martaguillem@outlook.es](mailto:martaguillem@outlook.es). Y, no dudes en seguirme en GitHub y Linkedin.
 

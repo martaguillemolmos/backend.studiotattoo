@@ -42,14 +42,28 @@ const createUser = async (req: Request, res: Response) => {
       email: email.trim(),
       password: encryptedPassword,
     }).save();
-    return res.send(newUser);
+    if (newUser){
+      const token = jwt.sign(
+        {
+          id: newUser.id,
+          role: newUser.role,
+          is_active: newUser.is_active,
+        },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "2h",
+        }
+      );
+      return res.json({
+        success: true,
+        message: `Bienvenid@ a tu perfil, ${newUser.name}`,
+        token: token,
+        name: newUser.name,
+      });
+    }
+  
   } catch (error) {
-    console.log(error);
-    return res.json({
-      succes: false,
-      message: "No se ha creado usuario",
-      error: error,
-    });
+    res.status(403).json("No se ha creado el usuario.");
   }
 };
 
@@ -134,6 +148,7 @@ const loginUser = async (req: Request, res: Response) => {
         success: true,
         message: `Bienvenid@ a tu perfil, ${user.name}`,
         token: token,
+        name: user.name,
       });
     } else {
       return res

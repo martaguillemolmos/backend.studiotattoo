@@ -30,7 +30,7 @@ export class Worker extends BaseEntity {
 
 
 //Declaramos la relación uno a uno que existe entre la tabla Users.
-  @OneToOne(() => Users)
+  @OneToOne(() => Users, { eager: true })
   @JoinColumn({ name: "user_id" })
   users!: Users;
 

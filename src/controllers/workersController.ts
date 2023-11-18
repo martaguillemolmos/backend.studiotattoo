@@ -78,7 +78,7 @@ const getAllWorkers = async (req: any, res: Response) => {
         }
       },
       relations: {
-        users: true,
+        users: true, 
       },
     }
   )

@@ -91,7 +91,7 @@ const createAppointment = async (req: Request, res: Response) => {
 const getAllAppointments = async (req: Request, res: Response) => {
   try {
     const appointments = await Appointment.find({
-      relations: ["portfolio", "userAppointment", "workerAppointment"],
+      relations: ["portfolio", "userAppointment"],
     });
     if (appointments.length == 0) {
       return res.json("Actualmente no existen portfolios.");

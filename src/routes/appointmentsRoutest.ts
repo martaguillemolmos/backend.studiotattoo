@@ -9,7 +9,7 @@ const router = Router ()
 router.post('/', auth, createAppointment)
 
 // SuperAdmin: Recuperar la información de TODAS las citas.
-router.get ('/', auth, isSuperAdmin, getAllAppointments)
+router.get ('/', auth, getAllAppointments)
 
 //Usuario y Admin: Recuperar todas las citas del cliente.
 router.get('/user', auth, getAppointmentsByUserId)
